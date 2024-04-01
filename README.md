@@ -1,3 +1,14 @@
+## フロントエンド
+### Storybookについて
+frontendコンテナ内で実行するとリバースプロキシの関係でアクセスできなかった
+よって、WSL環境上で以下を実行してStorybook使用する場合は立ち上げる
+
+```
+npm run storybook
+```
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
