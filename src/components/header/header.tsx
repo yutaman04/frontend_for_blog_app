@@ -11,9 +11,7 @@ export default function Header() {
                 <Box className="relative">
                     <Image src={"/images/header_hero.jpg"} alt={""} width={2000} height={50}/>
                     <Typography className="absolute inset-0 flex items-center justify-center text-4xl font-extrabold">{HEADER_TITLE}</Typography>
-                </Box>
-                <Box className="relative items-center justify-center" style={{height: 50}}>
-                    <Grid container spacing={0.5 } className="absolute inset-0 flex items-center justify-center font-extrabold text-center">
+                    <Grid container spacing={0.5 } className="absolute bottom-0 flex items-center justify-center font-extrabold text-center bg-sky-500 h-10">
                         <Grid item xs={4}>
                             <a>記事一覧</a>
                         </Grid>
