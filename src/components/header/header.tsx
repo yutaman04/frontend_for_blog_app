@@ -1,6 +1,6 @@
 'use client'
-import { HEADER_TITLE } from '@/_config/constantText'
-import { AppBar, Box, Grid, Typography } from '@mui/material'
+import { HEADER_TITLE } from '@/config/constantText'
+import { AppBar, Box, Grid, Typography, useScrollTrigger } from '@mui/material'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { isMobile } from 'react-device-detect'
@@ -11,6 +11,7 @@ export default function Header() {
   const [isMounted, setIsMounted] = useState(false)
   const [titleFontsize, setTitleFontSize] = useState(60)
   const [menuFontSize, setMenuFontSize] = useState(20)
+  const trigger = useScrollTrigger()
 
   useEffect(() => {
     setIsMounted(true)
@@ -29,7 +30,8 @@ export default function Header() {
             src={'/images/header_hero.jpg'}
             alt={''}
             width={2000}
-            height={100}
+            height={50}
+            style={{ height: isMobile ? 50 : 200 }}
           />
           <Typography
             className="absolute inset-0 flex items-center justify-center font-extrabold"
