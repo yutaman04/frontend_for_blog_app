@@ -67,6 +67,7 @@ export const Articles: React.FC<Props> = ({}) => {
       <div style={{ marginTop: isMobile ? 0 : 150 }}>
         <p className=" text-3xl">記事一覧</p>
         <Box
+          className=" items-center"
           style={{
             margin: 10,
           }}
@@ -74,7 +75,7 @@ export const Articles: React.FC<Props> = ({}) => {
           <Grid
             container
             className=" items-center flex"
-            style={{ width: isMobile ? '90vw' : '50vw' }}
+            style={{ width: isMobile ? '90vw' : '650px', minWidth: '650px' }}
           >
             {data.articles.map((article: Article) => (
               <Grid item className=" items-center" key={article.id} xs={gridXs}>

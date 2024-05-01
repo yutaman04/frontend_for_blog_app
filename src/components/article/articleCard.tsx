@@ -35,6 +35,25 @@ export const ArticleCard: React.FC<Props> = ({ article }) => {
     return article.content
   }
 
+  const showUpdateCreateDate = () => {
+    const createDate = new Date(article.createdAt)
+    const updateDate = new Date(article.updatedAt)
+    const strCreatedAt =
+      createDate.getFullYear() +
+      '/' +
+      createDate.getMonth() +
+      '/' +
+      createDate.getDate()
+    const strUpdatedAt =
+      updateDate.getFullYear() +
+      '/' +
+      updateDate.getMonth() +
+      '/' +
+      updateDate.getDate()
+
+    return '更新:' + strUpdatedAt + ',' + '作成:' + strCreatedAt
+  }
+
   const articleTopImagePath =
     article.articleImages.length > 0 &&
     process.env.NEXT_PUBLIC_BACKEND_PUBLIC_PATH
@@ -52,7 +71,7 @@ export const ArticleCard: React.FC<Props> = ({ article }) => {
         marginTop: 10,
         marginBottom: 10,
         width: isMobile ? '90vw' : 300,
-        height: isMobile ? '25vh' : '50vh',
+        height: isMobile ? '25vh' : '52vh',
       }}
     >
       <Grid container className="flex">
@@ -61,16 +80,28 @@ export const ArticleCard: React.FC<Props> = ({ article }) => {
             <img
               className=" items-center"
               src={articleTopImagePath}
-              style={{ width: 'auto', height: '100%', objectFit: 'cover' }}
+              style={{ width: 'auto', height: '200px', objectFit: 'cover' }}
             />
           </Card>
         </Grid>
         <Grid className=" items-center" item xs={12}>
-          <Box m={2} width={'95%'}>
+          <Box m={2} width={'90%'}>
             <CategoryLabel
               categoryId={article.categoryId}
               categoryName={article.categoryName}
             />
+            <Typography
+              className=" text-xs"
+              style={{
+                color: 'gray',
+                textAlign: 'right',
+                marginRight: 10,
+                marginTop: 5,
+                fontSize: 12,
+              }}
+            >
+              {showUpdateCreateDate()}
+            </Typography>
             <p className=" text-2xl">{article.title}</p>
             <Typography style={{ overflowWrap: 'break-word' }}>
               {limitedContent()}
