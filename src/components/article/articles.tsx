@@ -13,6 +13,7 @@ import { isMobile } from 'react-device-detect'
 import React, { useEffect, useState } from 'react'
 import { ARTICLE_LIST_PAGE_COUNT } from '@/config/setting'
 import { Box, Grid } from '@mui/material'
+import { ArticleLoading } from '../loading/articleLoading'
 
 interface Props {}
 
@@ -60,7 +61,7 @@ export const Articles: React.FC<Props> = ({}) => {
   const ArticleList = () => {
     const { loading, error, data } = useQuery(ARTICLES_QUERY)
 
-    if (loading) return <p>...loading</p>
+    if (loading) return <ArticleLoading />
     if (error) return <p>{error.message}</p>
 
     return (
@@ -75,7 +76,10 @@ export const Articles: React.FC<Props> = ({}) => {
           <Grid
             container
             className=" items-center flex"
-            style={{ width: isMobile ? '90vw' : '650px', minWidth: '650px' }}
+            style={{
+              width: isMobile ? '80vw' : '650px',
+              minWidth: isMobile ? '100px' : '650px',
+            }}
           >
             {data.articles.map((article: Article) => (
               <Grid item className=" items-center" key={article.id} xs={gridXs}>
