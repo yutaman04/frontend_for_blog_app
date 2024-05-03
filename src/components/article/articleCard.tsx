@@ -70,8 +70,8 @@ export const ArticleCard: React.FC<Props> = ({ article }) => {
         marginRight: 'auto',
         marginTop: 10,
         marginBottom: 10,
-        width: isMobile ? '90vw' : 300,
-        height: isMobile ? '25vh' : '52vh',
+        width: isMobile ? '75vw' : 300,
+        height: isMobile ? '55vh' : '52vh',
       }}
     >
       <Grid container className="flex">
