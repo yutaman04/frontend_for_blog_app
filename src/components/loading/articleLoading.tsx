@@ -7,7 +7,12 @@ export const ArticleLoading: React.FC<Props> = ({}) => {
   return (
     <div
       className="LoadMain"
-      style={{ width: '400px', marginTop: 'auto', marginBottom: 'auto' }}
+      style={{
+        width: '90vw',
+        maxWidth: 300,
+        marginTop: 'auto',
+        marginBottom: 'auto',
+      }}
     >
       <div className="progressBarContainer">
         <h2>Now Loading・・・</h2>
