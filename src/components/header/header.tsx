@@ -12,6 +12,7 @@ export default function Header() {
   const [titleFontsize, setTitleFontSize] = useState(60)
   const [menuFontSize, setMenuFontSize] = useState(20)
   const trigger = useScrollTrigger()
+  console.log(trigger)
 
   useEffect(() => {
     setIsMounted(true)
@@ -24,21 +25,26 @@ export default function Header() {
   if (!isMounted) return null
   return (
     <>
-      <AppBar style={{ height: 50 }}>
+      <AppBar component="header">
         <Box className="relative">
-          <Image
-            src={'/images/header_hero.jpg'}
-            alt={''}
-            width={2000}
-            height={50}
-            style={{ height: isMobile ? 50 : 200 }}
-          />
-          <Typography
-            className="absolute inset-0 flex items-center justify-center font-extrabold"
-            style={{ fontSize: titleFontsize }}
-          >
-            {HEADER_TITLE}
-          </Typography>
+          {!trigger && (
+            <>
+              <Image
+                src={'/images/header_hero.jpg'}
+                alt={''}
+                width={2000}
+                height={50}
+                style={{ height: isMobile ? 50 : 200 }}
+              />
+              <Typography
+                className="absolute inset-0 flex items-center justify-center font-extrabold"
+                style={{ fontSize: titleFontsize }}
+              >
+                {HEADER_TITLE}
+              </Typography>
+            </>
+          )}
+
           <Grid
             container
             spacing={0.5}
