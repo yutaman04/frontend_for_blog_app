@@ -1,1 +1,1 @@
-export const HEADER_TITLE = "Example Blog Title"
+export const SITE_TITLE = 'Example Blog Title'

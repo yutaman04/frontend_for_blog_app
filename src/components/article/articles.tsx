@@ -97,7 +97,7 @@ export const Articles: React.FC<Props> = ({}) => {
     if (error) return <ShowFetchError />
 
     return (
-      <div style={{ marginTop: isMobile ? 0 : 150 }}>
+      <div style={{ marginTop: isMobile ? 100 : 250 }}>
         <p className=" text-3xl">記事一覧</p>
         {data && data.articles.length > 0 ? (
           <>

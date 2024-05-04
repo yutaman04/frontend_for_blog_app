@@ -1,5 +1,5 @@
 'use client'
-import { HEADER_TITLE } from '@/config/constantText'
+import { SITE_TITLE } from '@/config/constantText'
 import { AppBar, Box, Grid, Typography, useScrollTrigger } from '@mui/material'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
@@ -12,7 +12,6 @@ export default function Header() {
   const [titleFontsize, setTitleFontSize] = useState(60)
   const [menuFontSize, setMenuFontSize] = useState(20)
   const trigger = useScrollTrigger()
-  console.log(trigger)
 
   useEffect(() => {
     setIsMounted(true)
@@ -40,7 +39,7 @@ export default function Header() {
                 className="absolute inset-0 flex items-center justify-center font-extrabold"
                 style={{ fontSize: titleFontsize }}
               >
-                {HEADER_TITLE}
+                {SITE_TITLE}
               </Typography>
             </>
           )}
