@@ -11,32 +11,40 @@ import {
 import { ArticleCard } from './articleCard'
 import { isMobile } from 'react-device-detect'
 import React, { useEffect, useState } from 'react'
-import { ARTICLE_LIST_PAGE_COUNT } from '@/config/setting'
+import {
+  ARTICLE_LIST_PAGE_COUNT,
+  ARTICLE_LIST_PAGE_COUNT_MOBILE,
+} from '@/config/setting'
 import { Box, Grid } from '@mui/material'
 import { ArticleLoading } from '../loading/articleLoading'
+import { useSearchParams } from 'next/navigation'
+import { ArticlePagenate } from './articlePagenate'
 
 interface Props {}
 
 export const Articles: React.FC<Props> = ({}) => {
-  const [page, setPage] = useState(1)
-  const [currentLimit, setCurrentLimit] = useState(ARTICLE_LIST_PAGE_COUNT)
-  const [currentOffset, setCurrentOOffset] = useState(0)
-  const [gridXs, setGridXs] = useState(6)
   const client = new ApolloClient({
     cache: new InMemoryCache(),
     link: new HttpLink({
       uri: 'http://localhost/api/graphql',
     }),
   })
-  useEffect(() => {
-    if (isMobile) {
-      setGridXs(12)
-    }
-  }, [])
 
-  const ARTICLES_QUERY = gql`
+  const ArticleList = () => {
+    const searchParams = useSearchParams()
+    // 現在のページ
+    const [page, setPage] = useState(Number(searchParams.get('page')))
+    // 1ページ当たりの件数
+    const perPage = isMobile
+      ? ARTICLE_LIST_PAGE_COUNT_MOBILE
+      : ARTICLE_LIST_PAGE_COUNT
+    // 取得のオフセット
+    const [currentOffset, setCurrentOffset] = useState(0)
+    const [gridXs, setGridXs] = useState(6)
+
+    const ARTICLES_QUERY = gql`
     query {
-      articles(limit:${currentLimit}, offset:${currentOffset}) {
+      articles(limit:${perPage}, offset:${currentOffset}) {
         id
         title
         categoryId
@@ -48,6 +56,7 @@ export const Articles: React.FC<Props> = ({}) => {
         createdAt
         isActive
         updatedAt
+        totalCount
         articleImages {
           articleId
           imageName
@@ -58,8 +67,30 @@ export const Articles: React.FC<Props> = ({}) => {
       }
     }
   `
-  const ArticleList = () => {
-    const { loading, error, data } = useQuery(ARTICLES_QUERY)
+
+    useEffect(() => {
+      refetch()
+    }, [currentOffset])
+    // ページまたはperPageの更新時
+    useEffect(() => {
+      if (page === 0) {
+        setPage(1)
+        setCurrentOffset(0)
+      } else {
+        setCurrentOffset(page * perPage - perPage)
+      }
+    }, [page])
+    // 初期レンダリング時
+    useEffect(() => {
+      if (isMobile) {
+        setGridXs(12)
+      }
+    }, [])
+    const { loading, error, data, refetch } = useQuery(ARTICLES_QUERY)
+    useEffect(() => {
+      if (data && data.articles.length > 0) {
+      }
+    }, [data])
 
     if (loading) return <ArticleLoading />
     if (error) return <p>{error.message}</p>
@@ -67,27 +98,54 @@ export const Articles: React.FC<Props> = ({}) => {
     return (
       <div style={{ marginTop: isMobile ? 0 : 150 }}>
         <p className=" text-3xl">記事一覧</p>
-        <Box
-          className=" items-center"
-          style={{
-            margin: 10,
-          }}
-        >
-          <Grid
-            container
-            className=" items-center flex"
-            style={{
-              width: isMobile ? '80vw' : '650px',
-              minWidth: isMobile ? '100px' : '650px',
-            }}
-          >
-            {data.articles.map((article: Article) => (
-              <Grid item className=" items-center" key={article.id} xs={gridXs}>
-                <ArticleCard article={article} />
+        {data && data.articles.length > 0 ? (
+          <>
+            <ArticlePagenate
+              page={page}
+              perPage={perPage}
+              totalCount={data.articles[0].totalCount}
+            />
+            <Box
+              className=" items-center"
+              style={{
+                margin: 10,
+              }}
+            >
+              <Grid
+                container
+                className=" items-center flex"
+                style={{
+                  width: isMobile ? '80vw' : '650px',
+                  minWidth: isMobile ? '100px' : '650px',
+                }}
+              >
+                {data ? (
+                  <>
+                    {data.articles.map((article: Article) => (
+                      <Grid
+                        item
+                        className=" items-center"
+                        key={article.id}
+                        xs={gridXs}
+                      >
+                        <ArticleCard article={article} />
+                      </Grid>
+                    ))}
+                  </>
+                ) : (
+                  <>Not Found</>
+                )}
               </Grid>
-            ))}
-          </Grid>
-        </Box>
+            </Box>
+            <ArticlePagenate
+              page={page}
+              perPage={perPage}
+              totalCount={data.articles[0].totalCount}
+            />
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     )
   }
