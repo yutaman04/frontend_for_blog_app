@@ -19,6 +19,7 @@ import { Box, Grid } from '@mui/material'
 import { ArticleLoading } from '../loading/articleLoading'
 import { useSearchParams } from 'next/navigation'
 import { ArticlePagenate } from './articlePagenate'
+import { ShowFetchError } from '../error/showFetchError'
 
 interface Props {}
 
@@ -93,7 +94,7 @@ export const Articles: React.FC<Props> = ({}) => {
     }, [data])
 
     if (loading) return <ArticleLoading />
-    if (error) return <p>{error.message}</p>
+    if (error) return <ShowFetchError />
 
     return (
       <div style={{ marginTop: isMobile ? 0 : 150 }}>
