@@ -1,13 +1,6 @@
 'use client'
 import { Article } from '@/config/interfaces'
-import {
-  ApolloClient,
-  ApolloProvider,
-  HttpLink,
-  InMemoryCache,
-  gql,
-  useQuery,
-} from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 import { ArticleCard } from './articleCard'
 import { isMobile } from 'react-device-detect'
 import React, { useEffect, useState } from 'react'
@@ -20,17 +13,11 @@ import { ArticleLoading } from '../loading/articleLoading'
 import { useSearchParams } from 'next/navigation'
 import { ArticlePagenate } from './articlePagenate'
 import { ShowFetchError } from '../error/showFetchError'
+import { ApolloProviderClientWrapper } from '../graphql/apolloProviderClientWrapper'
 
 interface Props {}
 
 export const Articles: React.FC<Props> = ({}) => {
-  const client = new ApolloClient({
-    cache: new InMemoryCache(),
-    link: new HttpLink({
-      uri: 'http://localhost/api/graphql',
-    }),
-  })
-
   const ArticleList = () => {
     const searchParams = useSearchParams()
     // 現在のページ
@@ -152,10 +139,8 @@ export const Articles: React.FC<Props> = ({}) => {
   }
 
   return (
-    <>
-      <ApolloProvider client={client}>
-        <ArticleList />
-      </ApolloProvider>
-    </>
+    <ApolloProviderClientWrapper>
+      <ArticleList />
+    </ApolloProviderClientWrapper>
   )
 }
