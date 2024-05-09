@@ -4,7 +4,7 @@ import {
   LOCAL_STRAGE_AUTH_TOKEN_KEY,
 } from '@/config/setting'
 
-const useLocalStrage = () => {
+const useAuthInfo = () => {
   /**
    * LocalStrageへJWTとユーザー名を保存する
    * @param jwt string
@@ -36,6 +36,18 @@ const useLocalStrage = () => {
     return authInfo
   }
 
+  /**
+   * 認証情報を現在持っているか判定
+   * @returns boolean
+   */
+  const authInfoHasDecision = () => {
+    const authInfo = getAutuInfo()
+    if (authInfo.jwt && authInfo.userName) {
+      return true
+    }
+    return false
+  }
+
   return {
     setAuthInfoToLocalStrage,
     deleteAuthInfoFromLocalStrage,
@@ -43,4 +55,4 @@ const useLocalStrage = () => {
   }
 }
 
-export default useLocalStrage
+export default useAuthInfo

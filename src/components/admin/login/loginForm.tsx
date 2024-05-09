@@ -12,7 +12,7 @@ import {
   SUCCESS,
 } from '@/config/apiMessages'
 import { useRouter } from 'next/navigation'
-import useLocalStrage from '@/common_hooks/useLocalStrage'
+import useAuthInfo from '@/common_hooks/useAuthInfo'
 
 interface Props {}
 type ContactFormData = Yup.InferType<typeof schema>
@@ -22,7 +22,7 @@ const schema = Yup.object().shape({
 })
 
 export const AdminLoginForm: React.FC<Props> = ({}) => {
-  const { setAuthInfoToLocalStrage } = useLocalStrage()
+  const { setAuthInfoToLocalStrage } = useAuthInfo()
   const LoginForm = () => {
     const {
       register,
