@@ -25,3 +25,8 @@ export interface ArticleImage {
   createdAt: string
   updatedAt: string
 }
+
+export interface AuthInfo {
+  jwt: string | null
+  userName: string | null
+}
