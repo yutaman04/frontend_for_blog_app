@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import useAuthInfo from '@/common_hooks/useAuthInfo'
 import { useRouter } from 'next/navigation'
 import { gql, useMutation } from '@apollo/client'
@@ -37,15 +37,18 @@ export const AdminAuthWrapper: React.FC<Props> = ({ children }) => {
     }
   }
 
-  if (!authInfoHasDecision()) {
-    router.push('/admin-login')
-  } else {
-    const jwt = getAutuInfo().jwt
-    if (jwt) {
-      jwtVerification(jwt)
-    } else {
+  useEffect(() => {
+    if (!authInfoHasDecision()) {
       router.push('/admin-login')
+    } else {
+      const jwt = getAutuInfo().jwt
+      if (jwt) {
+        jwtVerification(jwt)
+      } else {
+        router.push('/admin-login')
+      }
     }
-  }
+  }, [])
+
   return <>{children}</>
 }
