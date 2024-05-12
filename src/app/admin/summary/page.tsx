@@ -1,12 +1,17 @@
-import { AdminLoginForm } from '@/components/admin/login/loginForm'
+import { AdminAuthWrapper } from '@/components/admin/adminAuthWrapper'
+import { ApolloProviderClientWrapper } from '@/components/graphql/apolloProviderClientWrapper'
 
 export default function Home() {
   return (
     <main
-      className="flex min-h-screen flex-col items-center justify-center"
-      style={{ marginLeft: 240 }}
+      className="min-h-screen flex-col"
+      style={{ marginLeft: 250, marginTop: 50 }}
     >
-      <h1>管理者サマリー画面</h1>
+      <ApolloProviderClientWrapper>
+        <AdminAuthWrapper>
+          <h1 className=" text-4xl font-extrabold">管理サマリー</h1>
+        </AdminAuthWrapper>
+      </ApolloProviderClientWrapper>
     </main>
   )
 }
