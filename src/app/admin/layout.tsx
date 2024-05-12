@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google'
 import './../globals.css'
 import Header from '@/components/header/header'
 import AdminSideMenuAndHeader from '@/components/sideMenu/adminSideMenuAndHeader'
+import { ApolloProviderClientWrapper } from '@/components/graphql/apolloProviderClientWrapper'
+import { AdminAuthWrapper } from '@/components/admin/adminAuthWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,8 +21,10 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={inter.className}>
-        <AdminSideMenuAndHeader />
-        {children}
+        <ApolloProviderClientWrapper>
+          <AdminSideMenuAndHeader />
+          <AdminAuthWrapper>{children}</AdminAuthWrapper>
+        </ApolloProviderClientWrapper>
       </body>
     </html>
   )
