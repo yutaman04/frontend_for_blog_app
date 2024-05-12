@@ -1,3 +1,4 @@
+'use client'
 import { ADMIN_SIDE_MENUE } from '@/config/constantText'
 import {
   AppBar,
@@ -12,10 +13,19 @@ import {
   Toolbar,
 } from '@mui/material'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import useAuthInfo from '@/common_hooks/useAuthInfo'
+import { useRouter } from 'next/navigation'
 
 interface Props {}
 export default function AdminSideMenuAndHeader() {
   const drawerWidth = 240
+  const { deleteAuthInfoFromLocalStrage } = useAuthInfo()
+  const router = useRouter()
+
+  const handleLogout = () => {
+    deleteAuthInfoFromLocalStrage()
+    router.push('/admin-login')
+  }
   return (
     <>
       <AppBar
@@ -25,7 +35,7 @@ export default function AdminSideMenuAndHeader() {
       >
         {/* <Grid container spacing={0.5}></Grid> */}
         <Box className=" justify-end">
-          <AccountCircleIcon />
+          <AccountCircleIcon className=" h-8" />
         </Box>
       </AppBar>
       <Drawer
@@ -54,6 +64,14 @@ export default function AdminSideMenuAndHeader() {
             ))}
           </List>
           <Divider />
+          <List>
+            <ListItem>
+              <ListItemButton onClick={handleLogout}>
+                <ListItemIcon></ListItemIcon>
+                <ListItemText>ログアウト</ListItemText>
+              </ListItemButton>
+            </ListItem>
+          </List>
         </Box>
       </Drawer>
     </>
