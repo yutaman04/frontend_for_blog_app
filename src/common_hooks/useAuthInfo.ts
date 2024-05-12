@@ -52,6 +52,7 @@ const useAuthInfo = () => {
     setAuthInfoToLocalStrage,
     deleteAuthInfoFromLocalStrage,
     getAutuInfo,
+    authInfoHasDecision,
   }
 }
 
