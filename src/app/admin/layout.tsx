@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './../globals.css'
-import Header from '@/components/header/header'
 import AdminSideMenuAndHeader from '@/components/sideMenu/adminSideMenuAndHeader'
 import { ApolloProviderClientWrapper } from '@/components/graphql/apolloProviderClientWrapper'
 import { AdminAuthWrapper } from '@/components/admin/adminAuthWrapper'
+import { RecoilProvider } from '@/components/admin/recoil/recoilProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,13 +19,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ja">
-      <body className={inter.className}>
-        <ApolloProviderClientWrapper>
-          <AdminSideMenuAndHeader />
-          <AdminAuthWrapper>{children}</AdminAuthWrapper>
-        </ApolloProviderClientWrapper>
-      </body>
-    </html>
+    <RecoilProvider>
+      <ApolloProviderClientWrapper>
+        <AdminSideMenuAndHeader />
+        <AdminAuthWrapper>{children}</AdminAuthWrapper>
+      </ApolloProviderClientWrapper>
+    </RecoilProvider>
   )
 }

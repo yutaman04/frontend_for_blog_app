@@ -4,6 +4,8 @@ import useAuthInfo from '@/common_hooks/useAuthInfo'
 import { useRouter } from 'next/navigation'
 import { gql, useMutation } from '@apollo/client'
 import { SUCCESS } from '@/config/apiMessages'
+import { RecoilRoot, useRecoilState } from 'recoil'
+import { myJwtState } from '@/state/jwtState'
 
 interface Props {
   children: React.ReactNode
@@ -20,6 +22,7 @@ export const AdminAuthWrapper: React.FC<Props> = ({ children }) => {
     }
   `
   const [jwtVerificationMutation] = useMutation(JWT_VERIFICATION_QUERY)
+  const [myJwt, setMyJwt] = useRecoilState(myJwtState)
   const jwtVerification = async (jwt: string) => {
     try {
       const response = await jwtVerificationMutation({
@@ -44,6 +47,7 @@ export const AdminAuthWrapper: React.FC<Props> = ({ children }) => {
       const jwt = getAutuInfo().jwt
       if (jwt) {
         jwtVerification(jwt)
+        setMyJwt(jwt)
       } else {
         router.push('/admin-login')
       }
