@@ -30,3 +30,10 @@ export interface AuthInfo {
   jwt: string | null
   userName: string | null
 }
+
+export interface AdminSummary {
+  totalArticleCount: number
+  disabledArticleCount: number
+  activeArticleCount: number
+  recentPostsArticle: Article[]
+}
