@@ -15,13 +15,17 @@ export const SummaryCountItem: React.FC<summaryCountContent> = ({
 }) => {
   return (
     <>
-      <Card className=" m-4 p-4">
-        <Grid container>
-          <Grid item xs={3}>
+      <Card className=" m-4 p-4 border-2 border-sky-600">
+        <Grid
+          container
+          className=" flex justify-center items-center text-center"
+        >
+          <Grid item xs={12} className=" text-2xl font-bold">
             {itemName}
           </Grid>
-          <Grid item xs={9}>
+          <Grid item xs={12} className=" text-7xl">
             {count}
+            <span className=" text-xl">記事</span>
           </Grid>
         </Grid>
       </Card>
