@@ -26,3 +26,10 @@ export const ADMIN_SIDE_MENUE = [
     href: '/admin/fixed-page-edit',
   } as ADMIN_MENUE,
 ]
+
+export const ADMIN_SUMMARY_LABELS = {
+  TOTAL_AOUNT: '総記事数',
+  DISABLE_COUNT: '非公開記事数',
+  ENABLE_COUNT: '公開記事数',
+  NEWER_ARTICLES: '直近投稿した3記事',
+}
