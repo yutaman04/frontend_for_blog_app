@@ -11,11 +11,8 @@ import {
   ERROR_USER_NOT_FOUND,
   SUCCESS,
 } from '@/config/apiMessages'
-import {
-  LOCAL_STRAGE_AUTH_TOKEN_KEY,
-  LOCAL_STRAGE_USER_NAME_KEY,
-} from '@/config/setting'
 import { useRouter } from 'next/navigation'
+import useAuthInfo from '@/common_hooks/useAuthInfo'
 
 interface Props {}
 type ContactFormData = Yup.InferType<typeof schema>
@@ -25,6 +22,7 @@ const schema = Yup.object().shape({
 })
 
 export const AdminLoginForm: React.FC<Props> = ({}) => {
+  const { setAuthInfoToLocalStrage } = useAuthInfo()
   const LoginForm = () => {
     const {
       register,
@@ -58,7 +56,11 @@ export const AdminLoginForm: React.FC<Props> = ({}) => {
           },
         })
         if (response.data.login.msg === SUCCESS) {
-          authSuccess(response.data.login.jwt)
+          setAuthInfoToLocalStrage(
+            response.data.login.jwt,
+            getValues('username')
+          )
+          router.push('/admin/summary')
         } else {
           let msg = response.data.login.msg
           if (response.data.login.msg === ERROR_USER_NOT_FOUND) {
@@ -74,14 +76,6 @@ export const AdminLoginForm: React.FC<Props> = ({}) => {
         // エラー処理
         alert(error)
       }
-    }
-
-    const authSuccess = (jwt: string) => {
-      // ユーザー名とjwtをローカルストレージに保存
-      localStorage.setItem(LOCAL_STRAGE_USER_NAME_KEY, getValues('username'))
-      localStorage.setItem(LOCAL_STRAGE_AUTH_TOKEN_KEY, jwt)
-
-      router.push('/admin/summary')
     }
 
     // formのonSubmitの型エラー対策のためWrapする

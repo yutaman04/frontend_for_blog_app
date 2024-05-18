@@ -1,9 +1,18 @@
-import { AdminLoginForm } from '@/components/admin/login/loginForm'
+import { AdminAuthWrapper } from '@/components/admin/adminAuthWrapper'
+import { SummaryWrapper } from '@/components/admin/summary/sammaryWrapper'
+import { ApolloProviderClientWrapper } from '@/components/graphql/apolloProviderClientWrapper'
+import AdminSideMenuAndHeader from '@/components/sideMenu/adminSideMenuAndHeader'
+import { Box } from '@mui/material'
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center">
-      <h1>管理者サマリー画面</h1>
+    <main
+      className="min-h-screen flex-col"
+      style={{ marginLeft: 250, marginTop: 50 }}
+    >
+      <Box>
+        <SummaryWrapper />
+      </Box>
     </main>
   )
 }
