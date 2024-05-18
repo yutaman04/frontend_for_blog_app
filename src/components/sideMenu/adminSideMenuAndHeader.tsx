@@ -1,5 +1,11 @@
 'use client'
-import { ADMIN_SIDE_MENUE } from '@/config/constantText'
+import {
+  ADMIN_SIDE_MENUE,
+  ADMIN_SIDMENU_ADD_ARTICLE,
+  ADMIN_SIDMENU_ADD_FIXED_PAGE_EDIT,
+  ADMIN_SIDMENU_ARTICLES,
+  ADMIN_SIDMENU_SUMMARY,
+} from '@/config/constantText'
 import {
   AppBar,
   Box,
@@ -11,10 +17,16 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
+  menuItemClasses,
 } from '@mui/material'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import useAuthInfo from '@/common_hooks/useAuthInfo'
 import { useRouter } from 'next/navigation'
+import SummarizeIcon from '@mui/icons-material/Summarize'
+import ArticleIcon from '@mui/icons-material/Article'
+import NoteAddIcon from '@mui/icons-material/NoteAdd'
+import DocumentScannerIcon from '@mui/icons-material/DocumentScanner'
+import LogoutIcon from '@mui/icons-material/Logout'
 
 interface Props {}
 export default function AdminSideMenuAndHeader() {
@@ -33,7 +45,6 @@ export default function AdminSideMenuAndHeader() {
         className=" flex font-extrabold bg-slate-500 h-10"
         style={{ zIndex: 10000 }}
       >
-        {/* <Grid container spacing={0.5}></Grid> */}
         <Box className=" justify-end">
           <AccountCircleIcon className=" h-8" />
         </Box>
@@ -56,7 +67,12 @@ export default function AdminSideMenuAndHeader() {
               <ListItem key={menu.id} disablePadding>
                 <ListItemButton href={menu.href}>
                   <ListItemIcon>
-                    {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
+                    {menu.name === ADMIN_SIDMENU_SUMMARY && <SummarizeIcon />}
+                    {menu.name === ADMIN_SIDMENU_ARTICLES && <ArticleIcon />}
+                    {menu.name === ADMIN_SIDMENU_ADD_ARTICLE && <NoteAddIcon />}
+                    {menu.name === ADMIN_SIDMENU_ADD_FIXED_PAGE_EDIT && (
+                      <DocumentScannerIcon />
+                    )}
                   </ListItemIcon>
                   <ListItemText primary={menu.name} />
                 </ListItemButton>
@@ -67,7 +83,11 @@ export default function AdminSideMenuAndHeader() {
           <List>
             <ListItem>
               <ListItemButton onClick={handleLogout}>
-                <ListItemIcon></ListItemIcon>
+                <ListItemIcon>
+                  <ListItemIcon>
+                    <LogoutIcon />
+                  </ListItemIcon>
+                </ListItemIcon>
                 <ListItemText>ログアウト</ListItemText>
               </ListItemButton>
             </ListItem>
