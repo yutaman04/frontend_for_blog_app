@@ -55,6 +55,7 @@ export const ArticleCard: React.FC<Props> = ({ article }) => {
   }
 
   const articleTopImagePath =
+    article.articleImages &&
     article.articleImages.length > 0 &&
     process.env.NEXT_PUBLIC_BACKEND_PUBLIC_PATH
       ? process.env.NEXT_PUBLIC_BACKEND_PUBLIC_PATH +

@@ -10,7 +10,7 @@ export interface Article {
   content: string
   categoryId: number
   categoryName: string
-  articleImages: ArticleImage[]
+  articleImages: ArticleImage[] | null
 }
 
 export interface ArticleImage {
@@ -24,4 +24,16 @@ export interface ArticleImage {
   createUserDisplayName: string
   createdAt: string
   updatedAt: string
+}
+
+export interface AuthInfo {
+  jwt: string | null
+  userName: string | null
+}
+
+export interface AdminSummary {
+  totalArticleCount: number
+  disabledArticleCount: number
+  activeArticleCount: number
+  recentPostsArticle: Article[]
 }
