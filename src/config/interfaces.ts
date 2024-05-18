@@ -10,7 +10,7 @@ export interface Article {
   content: string
   categoryId: number
   categoryName: string
-  articleImages: ArticleImage[]
+  articleImages: ArticleImage[] | null
 }
 
 export interface ArticleImage {
