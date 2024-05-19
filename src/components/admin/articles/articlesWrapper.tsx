@@ -1,24 +1,27 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import useAuthInfo from '@/common_hooks/useAuthInfo'
-import { AdminSummary, Article } from '@/config/interfaces'
+import { Article } from '@/config/interfaces'
 import { gql, useQuery } from '@apollo/client'
 import { myJwtState } from '@/state/jwtState'
 import { useRecoilValue } from 'recoil'
-import { Box, Typography, styled } from '@mui/material'
+import { Typography } from '@mui/material'
 import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css' // Mandatory CSS required by the grid
 import 'ag-grid-community/styles/ag-theme-quartz.css' // Optional Theme applied to the grid
 import { ArticleLoading } from '@/components/loading/articleLoading'
 import { ColDef } from 'ag-grid-community'
+import { ArticlePagenate } from '@/components/article/articlePagenate'
+import { useSearchParams } from 'next/navigation'
 
 export const ArticleWrapper: React.FC = ({}) => {
-  const { authInfoHasDecision, getAutuInfo } = useAuthInfo()
-  const myJwt = useRecoilValue(myJwtState)
+  const searchParams = useSearchParams()
   // 取得のオフセット
   const [currentOffset, setCurrentOffset] = useState(0)
   // 1ページ当たりの件数
   const [perPage, setParPage] = useState(20)
+  // 現在のページ
+  const [page, setPage] = useState(Number(searchParams.get('page')))
   const ARTICLES_QUERY = gql`
     query {
       articles(limit:${perPage}, offset:${currentOffset}) {
@@ -82,9 +85,20 @@ export const ArticleWrapper: React.FC = ({}) => {
     return {
       headerName: article.headerName,
       field: article.field,
+      width: article.field === 'title' ? 400 : 200,
     } as ColDef
   })
 
+  // ページまたはperPageの更新時
+  useEffect(() => {
+    if (page === 0) {
+      setPage(1)
+      setCurrentOffset(0)
+    } else {
+      setCurrentOffset(page * perPage - perPage)
+    }
+  }, [page])
+  // 記事一覧の取得
   useEffect(() => {
     if (data && data.articles) {
       setArticles(data.articles)
@@ -109,6 +123,13 @@ export const ArticleWrapper: React.FC = ({}) => {
             paginationPageSize={perPage}
             paginationPageSizeSelector={false}
             rowHeight={50}
+            suppressPaginationPanel={true}
+          />
+          <ArticlePagenate
+            page={page}
+            totalCount={data.articles[0].totalCount}
+            perPage={perPage}
+            customHref="/admin/articles"
           />
         </div>
       )}
