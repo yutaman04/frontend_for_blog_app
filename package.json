@@ -17,6 +17,8 @@
     "@hookform/resolvers": "^3.3.4",
     "@mui/icons-material": "^5.15.17",
     "@mui/material": "^5.15.16",
+    "ag-grid-community": "^31.3.2",
+    "ag-grid-react": "^31.3.2",
     "axios": "^1.6.8",
     "graphql": "^16.8.1",
     "next": "14.1.4",
