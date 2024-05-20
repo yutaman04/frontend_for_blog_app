@@ -11,6 +11,7 @@ export interface Article {
   categoryId: number
   categoryName: string
   articleImages: ArticleImage[] | null
+  totalCount: number
 }
 
 export interface ArticleImage {

@@ -3297,6 +3297,19 @@ adjust-sourcemap-loader@^4.0.0:
     loader-utils "^2.0.0"
     regex-parser "^2.2.11"
 
+ag-grid-community@31.3.2, ag-grid-community@^31.3.2:
+  version "31.3.2"
+  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-31.3.2.tgz#588fd3be5cd5d79522886ca5dfc14757cb6c7d8c"
+  integrity sha512-GxqFRD0OcjaVRE1gwLgoP0oERNPH8Lk8wKJ1txulsxysEQ5dZWHhiIoXXSiHjvOCVMkK/F5qzY6HNrn6VeDMTQ==
+
+ag-grid-react@^31.3.2:
+  version "31.3.2"
+  resolved "https://registry.yarnpkg.com/ag-grid-react/-/ag-grid-react-31.3.2.tgz#6b492cd76ea79f46690f529ddc93389e138cd0b8"
+  integrity sha512-SFHN05bsXp901rIT00Fa6iQLCtyavoJiKaXEDUtAU5LMu+GTkjs/FPQBQ8754omgdDFr4NsS3Ri6QbqBne3rug==
+  dependencies:
+    ag-grid-community "31.3.2"
+    prop-types "^15.8.1"
+
 aggregate-error@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/aggregate-error/-/aggregate-error-3.1.0.tgz#92670ff50f5359bdb7a3e0d40d0ec30c5737687a"

@@ -14,12 +14,14 @@ interface Props {
   page: number
   perPage: number
   totalCount: number
+  customHref?: string
 }
 
 export const ArticlePagenate: React.FC<Props> = ({
   page,
   perPage,
   totalCount,
+  customHref = '/',
 }) => {
   const count = Math.floor(totalCount / perPage) + 1
   return (
@@ -32,7 +34,7 @@ export const ArticlePagenate: React.FC<Props> = ({
           <PaginationItem
             className=""
             component={MuiLink}
-            href={item.page === 1 ? `/` : `?page=${item.page}`}
+            href={item.page === 1 ? customHref : `?page=${item.page}`}
             {...item}
           />
         )}
