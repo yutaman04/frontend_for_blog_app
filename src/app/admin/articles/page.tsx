@@ -1,5 +1,6 @@
-import { ArticleWrapper } from '@/components/admin/articles/articlesWrapper'
-import { Box } from '@mui/material'
+/* eslint-disable react/react-in-jsx-scope */
+import { ArticleWrapper } from "@/components/admin/articles/articlesWrapper"
+import { Box } from "@mui/material"
 
 export default function Home() {
   return (
