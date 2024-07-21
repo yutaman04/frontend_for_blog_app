@@ -1,27 +1,28 @@
-'use client'
-import React, { useEffect, useState } from 'react'
-import useAuthInfo from '@/common_hooks/useAuthInfo'
-import { Article } from '@/config/interfaces'
-import { gql, useQuery } from '@apollo/client'
-import { myJwtState } from '@/state/jwtState'
-import { useRecoilValue } from 'recoil'
-import { Typography } from '@mui/material'
-import { AgGridReact } from 'ag-grid-react'
-import 'ag-grid-community/styles/ag-grid.css' // Mandatory CSS required by the grid
-import 'ag-grid-community/styles/ag-theme-quartz.css' // Optional Theme applied to the grid
-import { ArticleLoading } from '@/components/loading/articleLoading'
-import { ColDef } from 'ag-grid-community'
-import { ArticlePagenate } from '@/components/article/articlePagenate'
-import { useSearchParams } from 'next/navigation'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+"use client"
+import React, { useEffect, useState } from "react"
+import useAuthInfo from "@/common_hooks/useAuthInfo"
+import { Article } from "@/config/interfaces"
+import { gql, useQuery } from "@apollo/client"
+import { myJwtState } from "@/state/jwtState"
+import { useRecoilValue } from "recoil"
+import { Typography } from "@mui/material"
+import { AgGridReact } from "ag-grid-react"
+import "ag-grid-community/styles/ag-grid.css" // Mandatory CSS required by the grid
+import "ag-grid-community/styles/ag-theme-quartz.css" // Optional Theme applied to the grid
+import { ArticleLoading } from "@/components/loading/articleLoading"
+import { ColDef } from "ag-grid-community"
+import { ArticlePagenate } from "@/components/article/articlePagenate"
+import { useSearchParams } from "next/navigation"
 
-export const ArticleWrapper: React.FC = ({}) => {
+export const ArticleWrapper: React.FC = () => {
   const searchParams = useSearchParams()
   // 取得のオフセット
   const [currentOffset, setCurrentOffset] = useState(0)
   // 1ページ当たりの件数
   const [perPage, setParPage] = useState(20)
   // 現在のページ
-  const [page, setPage] = useState(Number(searchParams.get('page')))
+  const [page, setPage] = useState(Number(searchParams.get("page")))
   const ARTICLES_QUERY = gql`
     query {
       articles(limit:${perPage}, offset:${currentOffset}) {
@@ -52,32 +53,32 @@ export const ArticleWrapper: React.FC = ({}) => {
 
   const columnList = [
     {
-      field: 'id',
-      headerName: 'ID',
+      field: "id",
+      headerName: "ID",
     },
     {
-      field: 'title',
-      headerName: 'タイトル',
+      field: "title",
+      headerName: "タイトル",
     },
     {
-      field: 'categoryName',
-      headerName: 'カテゴリー',
+      field: "categoryName",
+      headerName: "カテゴリー",
     },
     {
-      field: 'isActive',
-      headerName: '有効化',
+      field: "isActive",
+      headerName: "有効化",
     },
     {
-      field: 'createUserDisplayName',
-      headerName: '作成者',
+      field: "createUserDisplayName",
+      headerName: "作成者",
     },
     {
-      field: 'updatedAt',
-      headerName: '更新日時',
+      field: "updatedAt",
+      headerName: "更新日時",
     },
     {
-      field: 'createdAt',
-      headerName: '作成日時',
+      field: "createdAt",
+      headerName: "作成日時",
     },
   ]
 
@@ -85,7 +86,7 @@ export const ArticleWrapper: React.FC = ({}) => {
     return {
       headerName: article.headerName,
       field: article.field,
-      width: article.field === 'title' ? 400 : 200,
+      width: article.field === "title" ? 400 : 200,
     } as ColDef
   })
 
@@ -114,7 +115,7 @@ export const ArticleWrapper: React.FC = ({}) => {
           <ArticleLoading />
         </div>
       ) : (
-        <div style={{ height: '80vh' }} className="ag-theme-quartz-auto-dark">
+        <div style={{ height: "80vh" }} className="ag-theme-quartz-auto-dark">
           <AgGridReact
             rowData={articles}
             columnDefs={colDefs}

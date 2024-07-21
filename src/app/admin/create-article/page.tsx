@@ -1,6 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { ArticleWrapper } from "@/components/admin/articles/articlesWrapper"
-import { Box } from "@mui/material"
+import { CreateArticleWrapper } from "@/components/admin/articles/createArticleWrapper"
 
 export default function Home() {
   return (
@@ -8,9 +7,7 @@ export default function Home() {
       className="min-h-screen flex-col"
       style={{ marginLeft: 250, marginTop: 50 }}
     >
-      <Box>
-        <ArticleWrapper />
-      </Box>
+      <CreateArticleWrapper />
     </main>
   )
 }
