@@ -38,3 +38,15 @@ export interface AdminSummary {
   activeArticleCount: number
   recentPostsArticle: Article[]
 }
+
+export interface CreateArticle {
+  articleBody: string
+  articleImages: string[]
+  articleTitle: string
+  categoryId: number
+}
+
+export interface Category {
+  id: string
+  categoryName: string
+}
