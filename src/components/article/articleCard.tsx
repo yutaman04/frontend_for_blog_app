@@ -5,6 +5,8 @@ import { Box, Card, Grid, Typography } from "@mui/material"
 import React from "react"
 import { isMobile } from "react-device-detect"
 import { CategoryLabel } from "./categoryLabel"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 
 interface Props {
   article: Article
@@ -66,7 +68,7 @@ export const ArticleCard: React.FC<Props> = ({ article }) => {
           </Card>
         </Grid>
         <Grid className=" items-center" item xs={12}>
-          <Box m={2} width={"90%"}>
+          <Box className=" text-ellipsis  hidd" m={2} width={"90%"}>
             <CategoryLabel
               categoryId={article.categoryId}
               categoryName={article.categoryName}
@@ -84,9 +86,9 @@ export const ArticleCard: React.FC<Props> = ({ article }) => {
               {showUpdateCreateDate()}
             </Typography>
             <p className=" text-2xl">{article.title}</p>
-            <Typography style={{ overflowWrap: "break-word" }}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {limitedContent()}
-            </Typography>
+            </ReactMarkdown>
           </Box>
         </Grid>
       </Grid>
