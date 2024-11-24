@@ -30,10 +30,12 @@
     "react-device-detect": "^2.2.3",
     "react-dom": "^18",
     "react-hook-form": "^7.51.4",
+    "react-markdown": "^9.0.1",
     "react-modal": "^3.16.1",
     "react-scripts": "^5.0.1",
     "react-simplemde-editor": "^5.2.0",
     "recoil": "^0.7.7",
+    "remark-gfm": "^4.0.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
