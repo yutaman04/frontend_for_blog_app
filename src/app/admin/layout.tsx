@@ -3,10 +3,10 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./../globals.css"
-import AdminSideMenuAndHeader from "@/components/sideMenu/adminSideMenuAndHeader"
-import { ApolloProviderClientWrapper } from "@/components/graphql/apolloProviderClientWrapper"
-import { AdminAuthWrapper } from "@/components/admin/adminAuthWrapper"
-import { RecoilProvider } from "@/components/admin/recoil/recoilProvider"
+import AdminSideMenuAndHeader from "@/components/organisms/adminSideMenuAndHeader"
+import { ApolloProviderClientWrapper } from "@/components/providers/apolloProviderClientWrapper"
+import { AdminAuthWrapper } from "@/components/organisms/adminAuthWrapper"
+import { RecoilProvider } from "@/components/providers/recoilProvider"
 
 const inter = Inter({ subsets: ["latin"] })
 

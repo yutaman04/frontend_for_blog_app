@@ -1,4 +1,4 @@
-import { AdminLoginForm } from '@/components/admin/login/loginForm'
+import { AdminLoginForm } from '@/components/organisms/loginForm'
 
 export default function Home() {
   return (

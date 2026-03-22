@@ -11,9 +11,9 @@ import "easymde/dist/easymde.min.css"
 import { gql, useMutation } from "@apollo/client"
 import { useRecoilValue } from "recoil"
 import { myJwtState } from "@/state/jwtState"
-import { CreateArticleSubmit } from "./parts/createArticleSubmit"
+import { CreateArticleSubmit } from "@/components/molecules/createArticleSubmit"
 import dynamic from "next/dynamic"
-import { SelectArticleCategory } from "./parts/selectArticleCategory"
+import { SelectArticleCategory } from "@/components/molecules/selectArticleCategory"
 
 // クライアント側でレンダリングする必要があるため動的読み込みをする
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {

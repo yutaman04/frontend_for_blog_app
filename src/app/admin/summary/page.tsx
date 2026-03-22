@@ -1,7 +1,4 @@
-import { AdminAuthWrapper } from '@/components/admin/adminAuthWrapper'
-import { SummaryWrapper } from '@/components/admin/summary/sammaryWrapper'
-import { ApolloProviderClientWrapper } from '@/components/graphql/apolloProviderClientWrapper'
-import AdminSideMenuAndHeader from '@/components/sideMenu/adminSideMenuAndHeader'
+import { SummaryWrapper } from '@/components/organisms/summaryWrapper'
 import { Box } from '@mui/material'
 
 export default function Home() {
