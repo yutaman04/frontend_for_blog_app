@@ -1,7 +1,7 @@
 'use client'
 import { Article } from '@/config/interfaces'
 import { gql, useQuery } from '@apollo/client'
-import { ArticleCard } from './articleCard'
+import { ArticleCard } from '@/components/molecules/articleCard'
 import { isMobile } from 'react-device-detect'
 import React, { useEffect, useState } from 'react'
 import {
@@ -9,11 +9,11 @@ import {
   ARTICLE_LIST_PAGE_COUNT_MOBILE,
 } from '@/config/setting'
 import { Box, Grid } from '@mui/material'
-import { ArticleLoading } from '../loading/articleLoading'
+import { ArticleLoading } from '@/components/atoms/articleLoading'
 import { useSearchParams } from 'next/navigation'
-import { ArticlePagenate } from './articlePagenate'
-import { ShowFetchError } from '../error/showFetchError'
-import { ApolloProviderClientWrapper } from '../graphql/apolloProviderClientWrapper'
+import { ArticlePagenate } from '@/components/molecules/articlePagenate'
+import { ShowFetchError } from '@/components/molecules/showFetchError'
+import { ApolloProviderClientWrapper } from '@/components/providers/apolloProviderClientWrapper'
 
 interface Props {}
 

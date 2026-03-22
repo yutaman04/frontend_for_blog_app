@@ -4,7 +4,7 @@ import { ARTICLE_CARD_CONTENT_LIMIT } from "@/config/setting"
 import { Box, Card, Grid, Typography } from "@mui/material"
 import React from "react"
 import { isMobile } from "react-device-detect"
-import { CategoryLabel } from "./categoryLabel"
+import { CategoryLabel } from "@/components/atoms/categoryLabel"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 

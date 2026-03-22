@@ -10,9 +10,9 @@ import { Typography } from "@mui/material"
 import { AgGridReact } from "ag-grid-react"
 import "ag-grid-community/styles/ag-grid.css" // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css" // Optional Theme applied to the grid
-import { ArticleLoading } from "@/components/loading/articleLoading"
+import { ArticleLoading } from "@/components/atoms/articleLoading"
 import { ColDef } from "ag-grid-community"
-import { ArticlePagenate } from "@/components/article/articlePagenate"
+import { ArticlePagenate } from "@/components/molecules/articlePagenate"
 import { useSearchParams } from "next/navigation"
 
 export const ArticleWrapper: React.FC = () => {

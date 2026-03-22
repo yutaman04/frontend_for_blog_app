@@ -1,5 +1,5 @@
 'use client'
-import { ApolloProviderClientWrapper } from '@/components/graphql/apolloProviderClientWrapper'
+import { ApolloProviderClientWrapper } from '@/components/providers/apolloProviderClientWrapper'
 import { Button, Card, Grid, Input, Typography } from '@mui/material'
 import { Form, useForm } from 'react-hook-form'
 import * as Yup from 'yup'

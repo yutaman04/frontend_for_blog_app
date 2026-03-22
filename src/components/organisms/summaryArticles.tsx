@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { Box, Card, Grid } from '@mui/material'
-import { ArticleCard } from '@/components/article/articleCard'
+import { ArticleCard } from '@/components/molecules/articleCard'
 import { Article } from '@/config/interfaces'
 
 type summaryCountContent = {

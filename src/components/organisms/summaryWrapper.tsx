@@ -6,9 +6,9 @@ import { AdminSummary } from '@/config/interfaces'
 import { gql, useQuery } from '@apollo/client'
 import { myJwtState } from '@/state/jwtState'
 import { useRecoilValue } from 'recoil'
-import { ArticleLoading } from '@/components/loading/articleLoading'
-import { SummaryCountItem } from './parts/summaryCountItem'
-import { SummaryArticles } from './parts/summaryArticles'
+import { ArticleLoading } from '@/components/atoms/articleLoading'
+import { SummaryCountItem } from '@/components/atoms/summaryCountItem'
+import { SummaryArticles } from '@/components/organisms/summaryArticles'
 import { ADMIN_SUMMARY_LABELS } from '@/config/constantText'
 
 export const SummaryWrapper: React.FC = ({}) => {

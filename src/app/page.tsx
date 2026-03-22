@@ -1,6 +1,6 @@
-import { Articles } from '@/components/article/articles'
-import Footer from '@/components/footer/footer'
-import Header from '@/components/header/header'
+import { Articles } from '@/components/organisms/articles'
+import Footer from '@/components/organisms/footer'
+import Header from '@/components/organisms/header'
 
 export default function Home() {
   return (

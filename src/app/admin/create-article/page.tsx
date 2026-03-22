@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { CreateArticleWrapper } from "@/components/admin/articles/createArticleWrapper"
+import { CreateArticleWrapper } from "@/components/organisms/createArticleWrapper"
 
 export default function Home() {
   return (
