@@ -109,6 +109,7 @@ export const CreateArticleWrapper: React.FC = ({}) => {
           onChange={onArticleDataChange}
           events={{ paste: handlePaste }}
           value={articleData}
+          options={{ spellChecker: false }}
         />
       </div>
     </>

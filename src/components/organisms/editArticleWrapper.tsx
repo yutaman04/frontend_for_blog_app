@@ -158,6 +158,7 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
             onChange={onArticleDataChange}
             events={{ paste: handlePaste }}
             value={articleData}
+            options={{ spellChecker: false }}
           />
         )}
       </div>
