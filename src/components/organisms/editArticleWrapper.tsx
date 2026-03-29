@@ -195,6 +195,7 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
             id="simple-mde"
             getMdeInstance={getInstance}
             onChange={onArticleDataChange}
+            value={articleData}
             events={editorEvents}
             options={editorOptions}
           />
