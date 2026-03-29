@@ -20,9 +20,10 @@ import { Category } from "@/config/interfaces"
 
 type props = {
   onChange: (e: string) => void
+  initialValue?: string
 }
 
-export const SelectArticleCategory: React.FC<props> = ({ onChange }) => {
+export const SelectArticleCategory: React.FC<props> = ({ onChange, initialValue }) => {
   const [articleData, setArticleData] = useState("")
 
   const onArticleDataChange = useCallback((value: string) => {
@@ -42,6 +43,13 @@ export const SelectArticleCategory: React.FC<props> = ({ onChange }) => {
 
   const { loading, error, data, refetch } = useQuery(GET_ARTICLE_CATEGORIES)
   const [selectedCategory, setSelectedCategory] = useState("")
+
+  // カテゴリーロード後に初期値をセット（ロード前にセットするとMUI out-of-range警告が発生する）
+  useEffect(() => {
+    if (data && initialValue && !selectedCategory) {
+      setSelectedCategory(initialValue)
+    }
+  }, [data, initialValue])
 
   return (
     <Select

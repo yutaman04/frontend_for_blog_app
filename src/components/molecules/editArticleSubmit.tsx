@@ -1,16 +1,14 @@
 "use client"
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useCallback, useEffect, useState } from "react"
-import { Button, Grid, Input, Typography } from "@mui/material"
-import "ag-grid-community/styles/ag-grid.css" // Mandatory CSS required by the grid
-import "ag-grid-community/styles/ag-theme-quartz.css" // Optional Theme applied to the grid
-import "easymde/dist/easymde.min.css"
+import React, { useState } from "react"
+import { Button } from "@mui/material"
 import { gql, useMutation } from "@apollo/client"
 import { useRecoilValue } from "recoil"
 import { myJwtState } from "@/state/jwtState"
 import { useRouter } from "next/navigation"
 
 type props = {
+  articleId: number
   articleTitle: string
   articleBody: string
   articleImages: string[]
@@ -18,7 +16,8 @@ type props = {
   onSuccess?: () => void
 }
 
-export const CreateArticleSubmit: React.FC<props> = ({
+export const EditArticleSubmit: React.FC<props> = ({
+  articleId,
   articleTitle,
   articleBody,
   articleImages,
@@ -28,15 +27,17 @@ export const CreateArticleSubmit: React.FC<props> = ({
   const router = useRouter()
   const myJwt = useRecoilValue(myJwtState)
 
-  const CREATE_ARTICLE_QUERY = gql`
-    mutation createArticle(
+  const EDIT_ARTICLE_QUERY = gql`
+    mutation editArticle(
+      $articleId: Int!
       $articleBody: String!
       $articleTitle: String!
       $categoryId: Int!
       $articleImages: [String!]!
       $jwt: String!
     ) {
-      createArticle(
+      editArticle(
+        articleId: $articleId
         articleBody: $articleBody
         articleTitle: $articleTitle
         categoryId: $categoryId
@@ -48,8 +49,8 @@ export const CreateArticleSubmit: React.FC<props> = ({
       }
     }
   `
-  const [createArticle, { data, loading, error }] =
-    useMutation(CREATE_ARTICLE_QUERY)
+  const [editArticle, { data, loading, error }] =
+    useMutation(EDIT_ARTICLE_QUERY)
 
   const [validMsg, setValidMsg] = useState<string[]>([])
 
@@ -69,11 +70,12 @@ export const CreateArticleSubmit: React.FC<props> = ({
     return tmpMsg.length === 0
   }
 
-  const handleCreateArticle = () => {
+  const handleEditArticle = () => {
     if (articleValidation()) {
-      createArticle({
+      editArticle({
         variables: {
           jwt: myJwt,
+          articleId: articleId,
           articleBody: articleBody,
           articleTitle: articleTitle,
           articleImages: articleImages,
@@ -94,9 +96,9 @@ export const CreateArticleSubmit: React.FC<props> = ({
     <>
       <Button
         className=" bg-lime-500 ml-5 text-orange-900 font-bold hover:bg-orange-950"
-        onClick={handleCreateArticle}
+        onClick={handleEditArticle}
       >
-        記事を投稿する
+        記事を更新する
       </Button>
       {validMsg.length > 0 && (
         <ul className=" ml-5 text-red-600 text-lg font-bold">

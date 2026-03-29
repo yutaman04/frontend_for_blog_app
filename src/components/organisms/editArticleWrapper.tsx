@@ -1,51 +1,102 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
-/* eslint-disable no-empty-pattern */
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Grid, Input, Typography } from "@mui/material"
-import "ag-grid-community/styles/ag-grid.css" // Mandatory CSS required by the grid
-import "ag-grid-community/styles/ag-theme-quartz.css" // Optional Theme applied to the grid
+import "ag-grid-community/styles/ag-grid.css"
+import "ag-grid-community/styles/ag-theme-quartz.css"
 import "easymde/dist/easymde.min.css"
-import { gql, useMutation } from "@apollo/client"
+import { gql, useMutation, useQuery } from "@apollo/client"
 import { useRecoilValue } from "recoil"
 import { myJwtState } from "@/state/jwtState"
-import { CreateArticleSubmit } from "@/components/molecules/createArticleSubmit"
 import dynamic from "next/dynamic"
 import { SelectArticleCategory } from "@/components/molecules/selectArticleCategory"
+import { EditArticleSubmit } from "@/components/molecules/editArticleSubmit"
+import { ArticleLoading } from "@/components/atoms/articleLoading"
 import { useLeaveConfirmation } from "@/common_hooks/useLeaveConfirmation"
 import { LeaveConfirmModal } from "@/components/molecules/leaveConfirmModal"
 
-// クライアント側でレンダリングする必要があるため動的読み込みをする
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
 })
 
-export const CreateArticleWrapper: React.FC = ({}) => {
+type Props = {
+  articleId: number
+}
+
+export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
   const [articleData, setArticleData] = useState("")
   const [articleTitle, setArticleTitle] = useState("")
   const [articleImageList, setArticleImageList] = useState<string[]>([])
   const [selectedCategory, setSelectedCategory] = useState("")
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [initialValues, setInitialValues] = useState({
+    title: "",
+    content: "",
+    category: "",
+  })
   let simpleMde: EasyMDE
   const getInstance = (instance: EasyMDE) => {
     simpleMde = instance
   }
 
-  // 記事本文更新
   const onArticleDataChange = useCallback((value: string) => {
     setArticleData(value)
   }, [])
 
   const myJwt = useRecoilValue(myJwtState)
 
-  const isDirty = articleTitle !== "" || articleData !== "" || selectedCategory !== ""
+  const isDirty =
+    isLoaded &&
+    (articleTitle !== initialValues.title ||
+      articleData !== initialValues.content ||
+      selectedCategory !== initialValues.category)
+
   const { showModal, handleConfirm, handleCancel, bypassNavigate } =
     useLeaveConfirmation(isDirty)
 
   const handleSubmitSuccess = () => {
     bypassNavigate("/admin/articles")
   }
+
+  const GET_ARTICLE = gql`
+    query {
+      article(id: ${articleId}) {
+        id
+        title
+        categoryId
+        content
+        articleImages {
+          id
+          imageName
+        }
+      }
+    }
+  `
+  const { loading, data } = useQuery(GET_ARTICLE, {
+    fetchPolicy: "network-only",
+  })
+
+  useEffect(() => {
+    if (data && data.article) {
+      const article = data.article
+      setArticleTitle(article.title)
+      setArticleData(article.content)
+      setSelectedCategory(String(article.categoryId))
+      setInitialValues({
+        title: article.title,
+        content: article.content,
+        category: String(article.categoryId),
+      })
+      if (article.articleImages) {
+        setArticleImageList(
+          article.articleImages.map((img: any) => img.imageName)
+        )
+      }
+      setIsLoaded(true)
+    }
+  }, [data])
+
   const ADMIN_ARTICLE_IMAGE_UPLOAD = gql`
     mutation articleImageUpload($jwt: String!, $file: Upload!) {
       articleImageUpload(jwt: $jwt, file: $file) {
@@ -54,7 +105,7 @@ export const CreateArticleWrapper: React.FC = ({}) => {
       }
     }
   `
-  const [uploadImage, { data, loading, error }] = useMutation(
+  const [uploadImage, { data: uploadData }] = useMutation(
     ADMIN_ARTICLE_IMAGE_UPLOAD
   )
 
@@ -76,32 +127,42 @@ export const CreateArticleWrapper: React.FC = ({}) => {
     }
   }, [myJwt, uploadImage])
 
-  const editorOptions = useMemo(() => ({ spellChecker: false }), [])
+  // isLoaded が true になった時点で articleData は確定しているため、その値で固定する
+  const editorOptions = useMemo(
+    () => ({ spellChecker: false, initialValue: articleData }),
+    [isLoaded] // eslint-disable-line react-hooks/exhaustive-deps
+  )
   const editorEvents = useMemo(() => ({ paste: handlePaste }), [handlePaste])
 
-  // 画像アップロード成功時
   useEffect(() => {
-    if (data) {
-      ;`![image](${data.articleImageUpload.filePath})`
+    if (uploadData) {
       simpleMde.codemirror.replaceSelection(
-        "![](" + data.articleImageUpload.filePath + ")"
+        "![](" + uploadData.articleImageUpload.filePath + ")"
       )
       setArticleImageList([
         ...articleImageList,
-        data.articleImageUpload.filePath as string,
+        uploadData.articleImageUpload.filePath as string,
       ])
     }
-  }, [data])
+  }, [uploadData])
+
+  if (loading) {
+    return (
+      <div className=" flex justify-center items-center">
+        <ArticleLoading />
+      </div>
+    )
+  }
 
   return (
     <>
       <LeaveConfirmModal
         open={showModal}
-        pageName="記事追加"
+        pageName="記事編集"
         onConfirm={handleConfirm}
         onCancel={handleCancel}
       />
-      <Typography className=" text-4xl font-bold">記事追加</Typography>
+      <Typography className=" text-4xl font-bold">記事編集</Typography>
       <div className=" flex justify-center items-center">
         <div className=" w-screen">
           タイトル
@@ -112,8 +173,14 @@ export const CreateArticleWrapper: React.FC = ({}) => {
               setArticleTitle(e.target.value)
             }}
           />
-          <SelectArticleCategory onChange={setSelectedCategory} />
-          <CreateArticleSubmit
+          {isLoaded && (
+            <SelectArticleCategory
+              onChange={setSelectedCategory}
+              initialValue={selectedCategory}
+            />
+          )}
+          <EditArticleSubmit
+            articleId={articleId}
             articleImages={articleImageList}
             articleTitle={articleTitle}
             articleBody={articleData}
@@ -123,13 +190,16 @@ export const CreateArticleWrapper: React.FC = ({}) => {
         </div>
       </div>
       <div className=" mt-5 w-11/12">
-        <SimpleMDE
-          id="simple-mde"
-          getMdeInstance={getInstance}
-          onChange={onArticleDataChange}
-          events={editorEvents}
-          options={editorOptions}
-        />
+        {isLoaded && (
+          <SimpleMDE
+            id="simple-mde"
+            getMdeInstance={getInstance}
+            onChange={onArticleDataChange}
+            value={articleData}
+            events={editorEvents}
+            options={editorOptions}
+          />
+        )}
       </div>
     </>
   )
