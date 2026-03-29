@@ -11,9 +11,10 @@ import { AgGridReact } from "ag-grid-react"
 import "ag-grid-community/styles/ag-grid.css" // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css" // Optional Theme applied to the grid
 import { ArticleLoading } from "@/components/atoms/articleLoading"
-import { ColDef } from "ag-grid-community"
+import { ColDef, ICellRendererParams } from "ag-grid-community"
 import { ArticlePagenate } from "@/components/molecules/articlePagenate"
 import { useSearchParams } from "next/navigation"
+import Link from "next/link"
 
 export const ArticleWrapper: React.FC = () => {
   const searchParams = useSearchParams()
@@ -82,13 +83,31 @@ export const ArticleWrapper: React.FC = () => {
     },
   ]
 
-  const colDefs = columnList.map((article) => {
-    return {
+  const editLinkRenderer = (params: ICellRendererParams) => {
+    return (
+      <Link
+        href={`/admin/articles/edit/${params.data.id}`}
+        className=" text-blue-400 underline"
+      >
+        編集
+      </Link>
+    )
+  }
+
+  const colDefs: ColDef[] = [
+    ...columnList.map((article) => ({
       headerName: article.headerName,
       field: article.field,
       width: article.field === "title" ? 400 : 200,
-    } as ColDef
-  })
+    })),
+    {
+      headerName: "操作",
+      field: "id",
+      width: 100,
+      cellRenderer: editLinkRenderer,
+      sortable: false,
+    },
+  ]
 
   // ページまたはperPageの更新時
   useEffect(() => {

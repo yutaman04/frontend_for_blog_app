@@ -20,9 +20,10 @@ import { Category } from "@/config/interfaces"
 
 type props = {
   onChange: (e: string) => void
+  initialValue?: string
 }
 
-export const SelectArticleCategory: React.FC<props> = ({ onChange }) => {
+export const SelectArticleCategory: React.FC<props> = ({ onChange, initialValue }) => {
   const [articleData, setArticleData] = useState("")
 
   const onArticleDataChange = useCallback((value: string) => {
@@ -41,7 +42,7 @@ export const SelectArticleCategory: React.FC<props> = ({ onChange }) => {
   `
 
   const { loading, error, data, refetch } = useQuery(GET_ARTICLE_CATEGORIES)
-  const [selectedCategory, setSelectedCategory] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState(initialValue || "")
 
   return (
     <Select
