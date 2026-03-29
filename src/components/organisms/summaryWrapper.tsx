@@ -47,7 +47,9 @@ export const SummaryWrapper: React.FC = ({}) => {
       }
     }
   `
-  const { loading, error, data, refetch } = useQuery(ADMIN_SUMMARY_QUERY)
+  const { loading, error, data, refetch } = useQuery(ADMIN_SUMMARY_QUERY, {
+    skip: !myJwt,
+  })
   const [summaryData, setSummaryData] = useState<AdminSummary | null>(null)
 
   useEffect(() => {
