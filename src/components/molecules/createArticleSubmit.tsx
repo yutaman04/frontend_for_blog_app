@@ -15,6 +15,7 @@ type props = {
   articleBody: string
   articleImages: string[]
   articlaCategoryId: string
+  onSuccess?: () => void
 }
 
 export const CreateArticleSubmit: React.FC<props> = ({
@@ -22,6 +23,7 @@ export const CreateArticleSubmit: React.FC<props> = ({
   articleBody,
   articleImages,
   articlaCategoryId,
+  onSuccess,
 }) => {
   const router = useRouter()
   const myJwt = useRecoilValue(myJwtState)
@@ -77,9 +79,13 @@ export const CreateArticleSubmit: React.FC<props> = ({
           articleImages: articleImages,
           categoryId: parseInt(articlaCategoryId),
         },
-      }).then((data) => {
+      }).then(() => {
         setValidMsg([])
-        router.push("/admin/articles")
+        if (onSuccess) {
+          onSuccess()
+        } else {
+          router.push("/admin/articles")
+        }
       })
     }
   }

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { Grid, Input, Typography } from "@mui/material"
 import "ag-grid-community/styles/ag-grid.css"
 import "ag-grid-community/styles/ag-theme-quartz.css"
@@ -13,6 +13,8 @@ import dynamic from "next/dynamic"
 import { SelectArticleCategory } from "@/components/molecules/selectArticleCategory"
 import { EditArticleSubmit } from "@/components/molecules/editArticleSubmit"
 import { ArticleLoading } from "@/components/atoms/articleLoading"
+import { useLeaveConfirmation } from "@/common_hooks/useLeaveConfirmation"
+import { LeaveConfirmModal } from "@/components/molecules/leaveConfirmModal"
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -28,6 +30,11 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
   const [articleImageList, setArticleImageList] = useState<string[]>([])
   const [selectedCategory, setSelectedCategory] = useState("")
   const [isLoaded, setIsLoaded] = useState(false)
+  const [initialValues, setInitialValues] = useState({
+    title: "",
+    content: "",
+    category: "",
+  })
   let simpleMde: EasyMDE
   const getInstance = (instance: EasyMDE) => {
     simpleMde = instance
@@ -38,6 +45,19 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
   }, [])
 
   const myJwt = useRecoilValue(myJwtState)
+
+  const isDirty =
+    isLoaded &&
+    (articleTitle !== initialValues.title ||
+      articleData !== initialValues.content ||
+      selectedCategory !== initialValues.category)
+
+  const { showModal, handleConfirm, handleCancel, bypassNavigate } =
+    useLeaveConfirmation(isDirty)
+
+  const handleSubmitSuccess = () => {
+    bypassNavigate("/admin/articles")
+  }
 
   const GET_ARTICLE = gql`
     query {
@@ -63,6 +83,11 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
       setArticleTitle(article.title)
       setArticleData(article.content)
       setSelectedCategory(String(article.categoryId))
+      setInitialValues({
+        title: article.title,
+        content: article.content,
+        category: String(article.categoryId),
+      })
       if (article.articleImages) {
         setArticleImageList(
           article.articleImages.map((img: any) => img.imageName)
@@ -84,7 +109,7 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
     ADMIN_ARTICLE_IMAGE_UPLOAD
   )
 
-  const handlePaste = (data: any, e: any) => {
+  const handlePaste = useCallback((data: any, e: any) => {
     if (
       e.clipboardData.files === undefined ||
       e.clipboardData.files.length === 0
@@ -100,7 +125,14 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
       upload.push(file)
       uploadImage({ variables: { jwt: myJwt, file: upload } })
     }
-  }
+  }, [myJwt, uploadImage])
+
+  // isLoaded が true になった時点で articleData は確定しているため、その値で固定する
+  const editorOptions = useMemo(
+    () => ({ spellChecker: false, initialValue: articleData }),
+    [isLoaded] // eslint-disable-line react-hooks/exhaustive-deps
+  )
+  const editorEvents = useMemo(() => ({ paste: handlePaste }), [handlePaste])
 
   useEffect(() => {
     if (uploadData) {
@@ -124,6 +156,12 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
 
   return (
     <>
+      <LeaveConfirmModal
+        open={showModal}
+        pageName="記事編集"
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
       <Typography className=" text-4xl font-bold">記事編集</Typography>
       <div className=" flex justify-center items-center">
         <div className=" w-screen">
@@ -147,6 +185,7 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
             articleTitle={articleTitle}
             articleBody={articleData}
             articlaCategoryId={selectedCategory}
+            onSuccess={handleSubmitSuccess}
           />
         </div>
       </div>
@@ -156,9 +195,8 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
             id="simple-mde"
             getMdeInstance={getInstance}
             onChange={onArticleDataChange}
-            events={{ paste: handlePaste }}
-            value={articleData}
-            options={{ spellChecker: false }}
+            events={editorEvents}
+            options={editorOptions}
           />
         )}
       </div>

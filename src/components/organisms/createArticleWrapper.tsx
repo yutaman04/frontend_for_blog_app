@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 /* eslint-disable no-empty-pattern */
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Grid, Input, Typography } from "@mui/material"
 import "ag-grid-community/styles/ag-grid.css" // Mandatory CSS required by the grid
@@ -14,6 +14,8 @@ import { myJwtState } from "@/state/jwtState"
 import { CreateArticleSubmit } from "@/components/molecules/createArticleSubmit"
 import dynamic from "next/dynamic"
 import { SelectArticleCategory } from "@/components/molecules/selectArticleCategory"
+import { useLeaveConfirmation } from "@/common_hooks/useLeaveConfirmation"
+import { LeaveConfirmModal } from "@/components/molecules/leaveConfirmModal"
 
 // クライアント側でレンダリングする必要があるため動的読み込みをする
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
@@ -36,6 +38,14 @@ export const CreateArticleWrapper: React.FC = ({}) => {
   }, [])
 
   const myJwt = useRecoilValue(myJwtState)
+
+  const isDirty = articleTitle !== "" || articleData !== "" || selectedCategory !== ""
+  const { showModal, handleConfirm, handleCancel, bypassNavigate } =
+    useLeaveConfirmation(isDirty)
+
+  const handleSubmitSuccess = () => {
+    bypassNavigate("/admin/articles")
+  }
   const ADMIN_ARTICLE_IMAGE_UPLOAD = gql`
     mutation articleImageUpload($jwt: String!, $file: Upload!) {
       articleImageUpload(jwt: $jwt, file: $file) {
@@ -48,7 +58,7 @@ export const CreateArticleWrapper: React.FC = ({}) => {
     ADMIN_ARTICLE_IMAGE_UPLOAD
   )
 
-  const handlePaste = (data: any, e: any) => {
+  const handlePaste = useCallback((data: any, e: any) => {
     if (
       e.clipboardData.files === undefined ||
       e.clipboardData.files.length === 0
@@ -64,7 +74,10 @@ export const CreateArticleWrapper: React.FC = ({}) => {
       upload.push(file)
       uploadImage({ variables: { jwt: myJwt, file: upload } })
     }
-  }
+  }, [myJwt, uploadImage])
+
+  const editorOptions = useMemo(() => ({ spellChecker: false }), [])
+  const editorEvents = useMemo(() => ({ paste: handlePaste }), [handlePaste])
 
   // 画像アップロード成功時
   useEffect(() => {
@@ -82,6 +95,12 @@ export const CreateArticleWrapper: React.FC = ({}) => {
 
   return (
     <>
+      <LeaveConfirmModal
+        open={showModal}
+        pageName="記事追加"
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
       <Typography className=" text-4xl font-bold">記事追加</Typography>
       <div className=" flex justify-center items-center">
         <div className=" w-screen">
@@ -99,6 +118,7 @@ export const CreateArticleWrapper: React.FC = ({}) => {
             articleTitle={articleTitle}
             articleBody={articleData}
             articlaCategoryId={selectedCategory}
+            onSuccess={handleSubmitSuccess}
           />
         </div>
       </div>
@@ -107,9 +127,8 @@ export const CreateArticleWrapper: React.FC = ({}) => {
           id="simple-mde"
           getMdeInstance={getInstance}
           onChange={onArticleDataChange}
-          events={{ paste: handlePaste }}
-          value={articleData}
-          options={{ spellChecker: false }}
+          events={editorEvents}
+          options={editorOptions}
         />
       </div>
     </>

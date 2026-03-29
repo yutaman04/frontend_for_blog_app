@@ -42,7 +42,14 @@ export const SelectArticleCategory: React.FC<props> = ({ onChange, initialValue 
   `
 
   const { loading, error, data, refetch } = useQuery(GET_ARTICLE_CATEGORIES)
-  const [selectedCategory, setSelectedCategory] = useState(initialValue || "")
+  const [selectedCategory, setSelectedCategory] = useState("")
+
+  // カテゴリーロード後に初期値をセット（ロード前にセットするとMUI out-of-range警告が発生する）
+  useEffect(() => {
+    if (data && initialValue && !selectedCategory) {
+      setSelectedCategory(initialValue)
+    }
+  }, [data, initialValue])
 
   return (
     <Select
