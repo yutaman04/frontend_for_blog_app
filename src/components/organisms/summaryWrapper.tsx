@@ -59,7 +59,9 @@ export const SummaryWrapper: React.FC = ({}) => {
   }, [data])
 
   useEffect(() => {
-    refetch()
+    if (myJwt) {
+      refetch()
+    }
   }, [myJwt])
   return (
     <>
