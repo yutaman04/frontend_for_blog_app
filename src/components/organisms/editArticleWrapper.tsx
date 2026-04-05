@@ -15,6 +15,7 @@ import { EditArticleSubmit } from "@/components/molecules/editArticleSubmit"
 import { ArticleLoading } from "@/components/atoms/articleLoading"
 import { useLeaveConfirmation } from "@/common_hooks/useLeaveConfirmation"
 import { LeaveConfirmModal } from "@/components/molecules/leaveConfirmModal"
+import { ArticleIsActiveToggle } from "@/components/molecules/articleIsActiveToggle"
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -29,6 +30,7 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
   const [articleTitle, setArticleTitle] = useState("")
   const [articleImageList, setArticleImageList] = useState<string[]>([])
   const [selectedCategory, setSelectedCategory] = useState("")
+  const [isActive, setIsActive] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
   const [initialValues, setInitialValues] = useState({
     title: "",
@@ -65,6 +67,7 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
         id
         title
         categoryId
+        isActive
         content
         articleImages {
           id
@@ -83,6 +86,7 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
       setArticleTitle(article.title)
       setArticleData(article.content)
       setSelectedCategory(String(article.categoryId))
+      setIsActive(article.isActive)
       setInitialValues({
         title: article.title,
         content: article.content,
@@ -177,6 +181,12 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
             <SelectArticleCategory
               onChange={setSelectedCategory}
               initialValue={selectedCategory}
+            />
+          )}
+          {isLoaded && (
+            <ArticleIsActiveToggle
+              articleId={articleId}
+              initialValue={isActive}
             />
           )}
           <EditArticleSubmit

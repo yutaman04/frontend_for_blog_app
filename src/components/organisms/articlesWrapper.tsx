@@ -15,6 +15,8 @@ import { ColDef, ICellRendererParams } from "ag-grid-community"
 import { ArticlePagenate } from "@/components/molecules/articlePagenate"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
+import { DeleteArticleButton } from "@/components/molecules/deleteArticleButton"
+import { ArticleIsActiveToggle } from "@/components/molecules/articleIsActiveToggle"
 
 export const ArticleWrapper: React.FC = () => {
   const searchParams = useSearchParams()
@@ -85,12 +87,26 @@ export const ArticleWrapper: React.FC = () => {
 
   const editLinkRenderer = (params: ICellRendererParams) => {
     return (
-      <Link
-        href={`/admin/articles/edit/${params.data.id}`}
-        className=" text-blue-400 underline"
-      >
-        編集
-      </Link>
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <Link href={`/admin/articles/edit/${params.data.id}`}>
+          <button style={{ backgroundColor: "#3b82f6", color: "#ffffff", padding: "2px 12px", borderRadius: 4 }}>
+            編集
+          </button>
+        </Link>
+        <DeleteArticleButton
+          articleId={parseInt(params.data.id)}
+          onSuccess={() => refetch()}
+        />
+      </div>
+    )
+  }
+
+  const isActiveRenderer = (params: ICellRendererParams) => {
+    return (
+      <ArticleIsActiveToggle
+        articleId={parseInt(params.data.id)}
+        initialValue={params.data.isActive}
+      />
     )
   }
 
@@ -98,12 +114,13 @@ export const ArticleWrapper: React.FC = () => {
     ...columnList.map((article) => ({
       headerName: article.headerName,
       field: article.field,
-      width: article.field === "title" ? 400 : 200,
+      width: article.field === "title" ? 400 : article.field === "id" ? 50 : 200,
+      cellRenderer: article.field === "isActive" ? isActiveRenderer : undefined,
     })),
     {
       headerName: "操作",
       field: "id",
-      width: 100,
+      width: 200,
       cellRenderer: editLinkRenderer,
       sortable: false,
     },

@@ -6,6 +6,7 @@ import { gql, useMutation } from "@apollo/client"
 import { useRecoilValue } from "recoil"
 import { myJwtState } from "@/state/jwtState"
 import { useRouter } from "next/navigation"
+import { DeleteArticleButton } from "@/components/molecules/deleteArticleButton"
 
 type props = {
   articleId: number
@@ -49,7 +50,7 @@ export const EditArticleSubmit: React.FC<props> = ({
       }
     }
   `
-  const [editArticle, { data, loading, error }] =
+  const [editArticle] =
     useMutation(EDIT_ARTICLE_QUERY)
 
   const [validMsg, setValidMsg] = useState<string[]>([])
@@ -95,11 +96,13 @@ export const EditArticleSubmit: React.FC<props> = ({
   return (
     <>
       <Button
-        className=" bg-lime-500 ml-5 text-orange-900 font-bold hover:bg-orange-950"
         onClick={handleEditArticle}
+        style={{ backgroundColor: "#3b82f6", color: "#ffffff", marginLeft: 8 }}
+        variant="contained"
       >
-        記事を更新する
+        更新
       </Button>
+      <DeleteArticleButton articleId={articleId} onSuccess={onSuccess} />
       {validMsg.length > 0 && (
         <ul className=" ml-5 text-red-600 text-lg font-bold">
           {validMsg.map((msg, index) => (
