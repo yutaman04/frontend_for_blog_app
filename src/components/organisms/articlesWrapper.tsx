@@ -50,7 +50,7 @@ export const ArticleWrapper: React.FC = () => {
     }
   `
   const [articles, setArticles] = useState<Article[]>([])
-  const { loading, error, data, refetch } = useQuery(ARTICLES_QUERY)
+  const { loading, error, data, refetch } = useQuery(ARTICLES_QUERY, { fetchPolicy: "network-only" })
 
   const columnList = [
     {
