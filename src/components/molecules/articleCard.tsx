@@ -2,7 +2,7 @@
 import { Article } from "@/config/interfaces"
 import { ARTICLE_CARD_CONTENT_LIMIT } from "@/config/setting"
 import { Box, Card, Grid, Typography } from "@mui/material"
-import React from "react"
+import React, { useState } from "react"
 import { isMobile } from "react-device-detect"
 import { CategoryLabel } from "@/components/atoms/categoryLabel"
 import ReactMarkdown from "react-markdown"
@@ -13,6 +13,8 @@ interface Props {
 }
 
 export const ArticleCard: React.FC<Props> = ({ article }) => {
+  const [imgError, setImgError] = useState(false)
+
   const limitedContent = () => {
     if (article.content.length > ARTICLE_CARD_CONTENT_LIMIT) {
       return article.content.substring(0, ARTICLE_CARD_CONTENT_LIMIT) + "..."
@@ -40,6 +42,7 @@ export const ArticleCard: React.FC<Props> = ({ article }) => {
   }
 
   const articleTopImagePath =
+    !imgError &&
     article.articleImages &&
     article.articleImages.length > 0 &&
     process.env.NEXT_PUBLIC_BACKEND_PUBLIC_PATH
@@ -64,6 +67,7 @@ export const ArticleCard: React.FC<Props> = ({ article }) => {
               className=" items-center"
               src={articleTopImagePath}
               style={{ width: "auto", height: "200px", objectFit: "cover" }}
+              onError={() => setImgError(true)}
             />
           </Card>
         </Grid>
