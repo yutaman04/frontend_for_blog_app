@@ -7,6 +7,7 @@ import { isMobile } from "react-device-detect"
 import { CategoryLabel } from "@/components/atoms/categoryLabel"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import Link from "next/link"
 
 interface Props {
   article: Article
@@ -50,6 +51,7 @@ export const ArticleCard: React.FC<Props> = ({ article }) => {
       : process.env.NEXT_PUBLIC_NO_IMAGE
 
   return (
+    <Link href={`/articles/${article.id}`} style={{ textDecoration: "none", color: "inherit" }}>
     <Card
       style={{
         marginLeft: "auto",
@@ -97,5 +99,6 @@ export const ArticleCard: React.FC<Props> = ({ article }) => {
         </Grid>
       </Grid>
     </Card>
+    </Link>
   )
 }

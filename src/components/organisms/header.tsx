@@ -4,6 +4,7 @@ import { AppBar, Box, Grid, Typography, useScrollTrigger } from '@mui/material'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { isMobile } from 'react-device-detect'
+import Link from 'next/link'
 
 interface Props {}
 
@@ -50,7 +51,7 @@ export default function Header() {
             className="absolute  flex items-center justify-center font-extrabold text-center bg-sky-500 h-10"
           >
             <Grid item xs={4} style={{ fontSize: menuFontSize }}>
-              <a>記事一覧</a>
+              <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>記事一覧</Link>
             </Grid>
             <Grid item xs={4} style={{ fontSize: menuFontSize }}>
               <a>自己紹介</a>
