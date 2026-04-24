@@ -149,12 +149,15 @@ const ArticleDetailContent: React.FC<Props> = ({ articleId }) => {
         onError={() => setImgError(true)}
       />
       <Box mt={3}>
-        <CategoryLabel categoryId={article.categoryId} categoryName={article.categoryName} />
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <CategoryLabel categoryId={article.categoryId} categoryName={article.categoryName} />
+          <Typography variant="body2" sx={{ textAlign: "right", color: "#ffffff" }}>
+            {`更新: ${formatDate(article.updatedAt)}`}<br />
+            {`作成: ${formatDate(article.createdAt)}`}
+          </Typography>
+        </Box>
         <Typography variant="h4" fontWeight="bold" mt={1}>
           {article.title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary" mt={1}>
-          {`作成: ${formatDate(article.createdAt)}　更新: ${formatDate(article.updatedAt)}　著者: ${article.createUserDisplayName}`}
         </Typography>
       </Box>
       <Box mt={4} className="markdown-body">
