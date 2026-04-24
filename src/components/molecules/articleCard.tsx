@@ -92,7 +92,10 @@ export const ArticleCard: React.FC<Props> = ({ article }) => {
               {showUpdateCreateDate()}
             </Typography>
             <p className=" text-2xl">{article.title}</p>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{ img: () => null }}
+            >
               {limitedContent()}
             </ReactMarkdown>
           </Box>
