@@ -150,6 +150,8 @@ export const ArticleWrapper: React.FC = () => {
         <div className=" flex justify-center items-center">
           <ArticleLoading />
         </div>
+      ) : !data?.articles?.length ? (
+        <Typography className="mt-4">記事はありません</Typography>
       ) : (
         <div style={{ height: "80vh" }} className="ag-theme-quartz-auto-dark">
           <AgGridReact

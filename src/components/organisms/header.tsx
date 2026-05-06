@@ -1,10 +1,38 @@
 'use client'
 import { SITE_TITLE } from '@/config/constantText'
-import { AppBar, Box, Grid, Typography, useScrollTrigger } from '@mui/material'
+import { AppBar, Box, Typography, useScrollTrigger } from '@mui/material'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { isMobile } from 'react-device-detect'
 import Link from 'next/link'
+import { gql, useQuery } from '@apollo/client'
+import { ApolloProviderClientWrapper } from '@/components/providers/apolloProviderClientWrapper'
+
+const FIXED_ARTICLES_QUERY = gql`
+  query {
+    articles(limit: 10, offset: 0, articleType: FIXED) {
+      id
+      title
+    }
+  }
+`
+
+const FixedArticleNavLinks: React.FC<{ fontSize: number }> = ({ fontSize }) => {
+  const { data } = useQuery(FIXED_ARTICLES_QUERY)
+  return (
+    <>
+      {data?.articles?.map((article: { id: string; title: string }) => (
+        <Link
+          key={article.id}
+          href={`/articles/${article.id}`}
+          style={{ color: 'inherit', textDecoration: 'none', fontSize, whiteSpace: 'nowrap' }}
+        >
+          {article.title}
+        </Link>
+      ))}
+    </>
+  )
+}
 
 interface Props {}
 
@@ -45,21 +73,17 @@ export default function Header() {
             </>
           )}
 
-          <Grid
-            container
-            spacing={0.5}
-            className="absolute  flex items-center justify-center font-extrabold text-center bg-sky-500 h-10"
+          <Box
+            className="absolute flex items-center justify-center font-extrabold bg-sky-500 h-10"
+            style={{ width: '100%', gap: isMobile ? 12 : 32 }}
           >
-            <Grid item xs={4} style={{ fontSize: menuFontSize }}>
-              <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>記事一覧</Link>
-            </Grid>
-            <Grid item xs={4} style={{ fontSize: menuFontSize }}>
-              <a>自己紹介</a>
-            </Grid>
-            <Grid item xs={4} style={{ fontSize: menuFontSize }}>
-              <a>プライバシーポリシー</a>
-            </Grid>
-          </Grid>
+            <Link href="/" style={{ color: 'inherit', textDecoration: 'none', fontSize: menuFontSize, whiteSpace: 'nowrap' }}>
+              記事一覧
+            </Link>
+            <ApolloProviderClientWrapper>
+              <FixedArticleNavLinks fontSize={menuFontSize} />
+            </ApolloProviderClientWrapper>
+          </Box>
         </Box>
       </AppBar>
     </>

@@ -1,0 +1,5 @@
+schema: "http://nginx/api/graphql"
+generates:
+  ./src/generated/graphql.ts:
+    plugins:
+      - typescript
