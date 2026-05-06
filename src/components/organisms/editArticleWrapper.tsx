@@ -32,6 +32,7 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
   const [selectedCategory, setSelectedCategory] = useState("")
   const [isActive, setIsActive] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [articleType, setArticleType] = useState<string | null>(null)
   const [initialValues, setInitialValues] = useState({
     title: "",
     content: "",
@@ -58,7 +59,7 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
     useLeaveConfirmation(isDirty)
 
   const handleSubmitSuccess = () => {
-    bypassNavigate("/admin/articles")
+    bypassNavigate(articleType === "FIXED" ? "/admin/fixed-articles" : "/admin/articles")
   }
 
   const GET_ARTICLE = gql`
@@ -68,6 +69,7 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
         title
         categoryId
         isActive
+        articleType
         content
         articleImages {
           id
@@ -87,6 +89,7 @@ export const EditArticleWrapper: React.FC<Props> = ({ articleId }) => {
       setArticleData(article.content)
       setSelectedCategory(String(article.categoryId))
       setIsActive(article.isActive)
+      setArticleType(article.articleType ?? null)
       setInitialValues({
         title: article.title,
         content: article.content,
