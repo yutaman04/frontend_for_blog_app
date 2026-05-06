@@ -7,7 +7,8 @@ export type ADMIN_MENUE = {
 export const ADMIN_SIDMENU_SUMMARY = 'サマリー'
 export const ADMIN_SIDMENU_ARTICLES = '記事一覧'
 export const ADMIN_SIDMENU_ADD_ARTICLE = '記事追加'
-export const ADMIN_SIDMENU_ADD_FIXED_PAGE_EDIT = '固定ページ編集'
+export const ADMIN_SIDMENU_FIXED_ARTICLES = '固定記事一覧'
+export const ADMIN_SIDMENU_ADD_FIXED_ARTICLE = '固定記事追加'
 export const ADMIN_SIDE_MENUE = [
   {
     id: 1,
@@ -26,8 +27,13 @@ export const ADMIN_SIDE_MENUE = [
   } as ADMIN_MENUE,
   {
     id: 4,
-    name: ADMIN_SIDMENU_ADD_FIXED_PAGE_EDIT,
-    href: '/admin/fixed-page-edit',
+    name: ADMIN_SIDMENU_FIXED_ARTICLES,
+    href: '/admin/fixed-articles',
+  } as ADMIN_MENUE,
+  {
+    id: 5,
+    name: ADMIN_SIDMENU_ADD_FIXED_ARTICLE,
+    href: '/admin/create-fixed-article',
   } as ADMIN_MENUE,
 ]
 

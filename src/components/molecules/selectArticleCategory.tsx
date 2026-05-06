@@ -1,55 +1,50 @@
 "use client"
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useCallback, useEffect, useState } from "react"
-import {
-  Button,
-  Grid,
-  Input,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material"
-import "ag-grid-community/styles/ag-grid.css" // Mandatory CSS required by the grid
-import "ag-grid-community/styles/ag-theme-quartz.css" // Optional Theme applied to the grid
-import SimpleMDE from "react-simplemde-editor"
-import "easymde/dist/easymde.min.css"
-import { gql, useMutation, useQuery } from "@apollo/client"
-import { useRecoilValue } from "recoil"
-import { myJwtState } from "@/state/jwtState"
+import React, { useEffect, useState } from "react"
+import { MenuItem, Select } from "@mui/material"
+import { gql, useQuery } from "@apollo/client"
 import { Category } from "@/config/interfaces"
 
 type props = {
   onChange: (e: string) => void
   initialValue?: string
+  articleType?: "NORMAL" | "FIXED"
 }
 
-export const SelectArticleCategory: React.FC<props> = ({ onChange, initialValue }) => {
-  const [articleData, setArticleData] = useState("")
+export const SelectArticleCategory: React.FC<props> = ({ onChange, initialValue, articleType }) => {
+  const GET_ARTICLE_CATEGORIES = articleType
+    ? gql`
+        query {
+          categories(articleType: ${articleType}) {
+            categoryName
+            id
+          }
+        }
+      `
+    : gql`
+        query {
+          categories {
+            categoryName
+            id
+          }
+        }
+      `
 
-  const onArticleDataChange = useCallback((value: string) => {
-    setArticleData(value)
-  }, [])
-
-  const myJwt = useRecoilValue(myJwtState)
-
-  const GET_ARTICLE_CATEGORIES = gql`
-    query {
-      categories {
-        categoryName
-        id
-      }
-    }
-  `
-
-  const { loading, error, data, refetch } = useQuery(GET_ARTICLE_CATEGORIES)
+  const { data } = useQuery(GET_ARTICLE_CATEGORIES)
   const [selectedCategory, setSelectedCategory] = useState("")
 
   // カテゴリーロード後に初期値をセット（ロード前にセットするとMUI out-of-range警告が発生する）
   useEffect(() => {
-    if (data && initialValue && !selectedCategory) {
-      setSelectedCategory(initialValue)
+    if (data?.categories?.length > 0) {
+      if (initialValue && !selectedCategory) {
+        setSelectedCategory(initialValue)
+        onChange(initialValue)
+      } else if (!initialValue && !selectedCategory) {
+        const firstId = String(data.categories[0].id)
+        setSelectedCategory(firstId)
+        onChange(firstId)
+      }
     }
-  }, [data, initialValue])
+  }, [data])
 
   return (
     <Select

@@ -2,8 +2,9 @@
 import {
   ADMIN_SIDE_MENUE,
   ADMIN_SIDMENU_ADD_ARTICLE,
-  ADMIN_SIDMENU_ADD_FIXED_PAGE_EDIT,
+  ADMIN_SIDMENU_ADD_FIXED_ARTICLE,
   ADMIN_SIDMENU_ARTICLES,
+  ADMIN_SIDMENU_FIXED_ARTICLES,
   ADMIN_SIDMENU_SUMMARY,
 } from '@/config/constantText'
 import {
@@ -25,7 +26,8 @@ import { useRouter } from 'next/navigation'
 import SummarizeIcon from '@mui/icons-material/Summarize'
 import ArticleIcon from '@mui/icons-material/Article'
 import NoteAddIcon from '@mui/icons-material/NoteAdd'
-import DocumentScannerIcon from '@mui/icons-material/DocumentScanner'
+import PushPinIcon from '@mui/icons-material/PushPin'
+import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined'
 import LogoutIcon from '@mui/icons-material/Logout'
 
 interface Props {}
@@ -70,9 +72,8 @@ export default function AdminSideMenuAndHeader() {
                     {menu.name === ADMIN_SIDMENU_SUMMARY && <SummarizeIcon />}
                     {menu.name === ADMIN_SIDMENU_ARTICLES && <ArticleIcon />}
                     {menu.name === ADMIN_SIDMENU_ADD_ARTICLE && <NoteAddIcon />}
-                    {menu.name === ADMIN_SIDMENU_ADD_FIXED_PAGE_EDIT && (
-                      <DocumentScannerIcon />
-                    )}
+                    {menu.name === ADMIN_SIDMENU_FIXED_ARTICLES && <PushPinIcon />}
+                    {menu.name === ADMIN_SIDMENU_ADD_FIXED_ARTICLE && <PushPinOutlinedIcon />}
                   </ListItemIcon>
                   <ListItemText primary={menu.name} />
                 </ListItemButton>
