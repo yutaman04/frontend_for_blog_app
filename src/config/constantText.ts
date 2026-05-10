@@ -9,6 +9,7 @@ export const ADMIN_SIDMENU_ARTICLES = '記事一覧'
 export const ADMIN_SIDMENU_ADD_ARTICLE = '記事追加'
 export const ADMIN_SIDMENU_FIXED_ARTICLES = '固定記事一覧'
 export const ADMIN_SIDMENU_ADD_FIXED_ARTICLE = '固定記事追加'
+export const ADMIN_SIDMENU_CATEGORIES = 'カテゴリー管理'
 export const ADMIN_SIDE_MENUE = [
   {
     id: 1,
@@ -34,6 +35,11 @@ export const ADMIN_SIDE_MENUE = [
     id: 5,
     name: ADMIN_SIDMENU_ADD_FIXED_ARTICLE,
     href: '/admin/create-fixed-article',
+  } as ADMIN_MENUE,
+  {
+    id: 6,
+    name: ADMIN_SIDMENU_CATEGORIES,
+    href: '/admin/categories',
   } as ADMIN_MENUE,
 ]
 
