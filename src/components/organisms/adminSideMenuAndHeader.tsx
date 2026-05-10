@@ -4,6 +4,7 @@ import {
   ADMIN_SIDMENU_ADD_ARTICLE,
   ADMIN_SIDMENU_ADD_FIXED_ARTICLE,
   ADMIN_SIDMENU_ARTICLES,
+  ADMIN_SIDMENU_CATEGORIES,
   ADMIN_SIDMENU_FIXED_ARTICLES,
   ADMIN_SIDMENU_SUMMARY,
 } from '@/config/constantText'
@@ -29,6 +30,7 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd'
 import PushPinIcon from '@mui/icons-material/PushPin'
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined'
 import LogoutIcon from '@mui/icons-material/Logout'
+import CategoryIcon from '@mui/icons-material/Category'
 
 interface Props {}
 export default function AdminSideMenuAndHeader() {
@@ -74,6 +76,7 @@ export default function AdminSideMenuAndHeader() {
                     {menu.name === ADMIN_SIDMENU_ADD_ARTICLE && <NoteAddIcon />}
                     {menu.name === ADMIN_SIDMENU_FIXED_ARTICLES && <PushPinIcon />}
                     {menu.name === ADMIN_SIDMENU_ADD_FIXED_ARTICLE && <PushPinOutlinedIcon />}
+                    {menu.name === ADMIN_SIDMENU_CATEGORIES && <CategoryIcon />}
                   </ListItemIcon>
                   <ListItemText primary={menu.name} />
                 </ListItemButton>
