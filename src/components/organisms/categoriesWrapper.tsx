@@ -10,6 +10,7 @@ import {
   Paper,
   Select,
   Snackbar,
+  Switch,
   Table,
   TableBody,
   TableCell,
@@ -25,6 +26,8 @@ import { gql, useMutation, useQuery } from "@apollo/client"
 import { useRecoilValue } from "recoil"
 import { myJwtState } from "@/state/jwtState"
 import { ArticleLoading } from "@/components/atoms/articleLoading"
+import { useLeaveConfirmation } from "@/common_hooks/useLeaveConfirmation"
+import { LeaveConfirmModal } from "@/components/molecules/leaveConfirmModal"
 
 type ArticleType = "NORMAL" | "FIXED"
 
@@ -35,6 +38,7 @@ interface CategoryRow {
   originalName: string
   articleType: ArticleType
   isActive: boolean
+  originalIsActive: boolean
   isNew: boolean
 }
 
@@ -69,6 +73,15 @@ const EDIT_CATEGORY = gql`
   }
 `
 
+const UPDATE_CATEGORY_IS_ACTIVE = gql`
+  mutation updateCategoryIsActive($jwt: String!, $categoryId: Int!, $isActive: Boolean!) {
+    updateCategoryIsActive(jwt: $jwt, categoryId: $categoryId, isActive: $isActive) {
+      categoryId
+      status
+    }
+  }
+`
+
 const DELETE_CATEGORY = gql`
   mutation deleteCategory($jwt: String!, $categoryId: Int!) {
     deleteCategory(jwt: $jwt, categoryId: $categoryId) {
@@ -90,6 +103,13 @@ export const CategoriesWrapper: React.FC = () => {
     severity: "success",
   })
 
+  const isDirty =
+    rows.some((row) => row.isNew) ||
+    rows.some((row) => !row.isNew && row.categoryName !== row.originalName) ||
+    rows.some((row) => !row.isNew && row.isActive !== row.originalIsActive)
+
+  const { showModal, handleConfirm, handleCancel } = useLeaveConfirmation(isDirty)
+
   const { loading, error, data, refetch } = useQuery(GET_ADMIN_CATEGORIES, {
     variables: { jwt: myJwt },
     fetchPolicy: "network-only",
@@ -97,6 +117,7 @@ export const CategoriesWrapper: React.FC = () => {
 
   const [createCategory] = useMutation(CREATE_CATEGORY)
   const [editCategory] = useMutation(EDIT_CATEGORY)
+  const [updateCategoryIsActive] = useMutation(UPDATE_CATEGORY_IS_ACTIVE)
   const [deleteCategory] = useMutation(DELETE_CATEGORY)
 
   useEffect(() => {
@@ -109,6 +130,7 @@ export const CategoriesWrapper: React.FC = () => {
           originalName: cat.categoryName,
           articleType: cat.articleType,
           isActive: cat.isActive,
+          originalIsActive: cat.isActive,
           isNew: false,
         }))
       )
@@ -118,6 +140,12 @@ export const CategoriesWrapper: React.FC = () => {
   const handleNameChange = (localId: string, value: string) => {
     setRows((prev) =>
       prev.map((row) => (row.localId === localId ? { ...row, categoryName: value } : row))
+    )
+  }
+
+  const handleIsActiveChange = (localId: string, newValue: boolean) => {
+    setRows((prev) =>
+      prev.map((row) => (row.localId === localId ? { ...row, isActive: newValue } : row))
     )
   }
 
@@ -151,28 +179,35 @@ export const CategoriesWrapper: React.FC = () => {
         originalName: "",
         articleType: "NORMAL",
         isActive: true,
+        originalIsActive: true,
         isNew: true,
       },
     ])
   }
 
   const handleSave = async () => {
-    const editTargets = rows.filter(
+    const nameEditTargets = rows.filter(
       (row) => !row.isNew && row.id !== null && row.categoryName.trim() !== "" && row.categoryName !== row.originalName
+    )
+    const isActiveEditTargets = rows.filter(
+      (row) => !row.isNew && row.id !== null && row.isActive !== row.originalIsActive
     )
     const createTargets = rows.filter(
       (row) => row.isNew && row.categoryName.trim() !== ""
     )
 
-    if (editTargets.length === 0 && createTargets.length === 0) {
+    if (nameEditTargets.length === 0 && isActiveEditTargets.length === 0 && createTargets.length === 0) {
       setSnackbar({ open: true, message: "変更はありません", severity: "success" })
       return
     }
 
     try {
       await Promise.all([
-        ...editTargets.map((row) =>
+        ...nameEditTargets.map((row) =>
           editCategory({ variables: { jwt: myJwt, categoryId: parseInt(row.id!), categoryName: row.categoryName.trim() } })
+        ),
+        ...isActiveEditTargets.map((row) =>
+          updateCategoryIsActive({ variables: { jwt: myJwt, categoryId: parseInt(row.id!), isActive: row.isActive } })
         ),
         ...createTargets.map((row) =>
           createCategory({ variables: { jwt: myJwt, categoryName: row.categoryName.trim(), articleType: row.articleType } })
@@ -248,11 +283,13 @@ export const CategoriesWrapper: React.FC = () => {
                     )}
                   </TableCell>
                   <TableCell>
-                    <Chip
-                      label={row.isActive ? "有効" : "無効"}
-                      size="small"
-                      color={row.isActive ? "success" : "default"}
-                    />
+                    {!row.isNew && (
+                      <Switch
+                        checked={row.isActive}
+                        onChange={(e) => handleIsActiveChange(row.localId, e.target.checked)}
+                        color="primary"
+                      />
+                    )}
                   </TableCell>
                   <TableCell>
                     <IconButton onClick={() => handleDelete(row)} size="small" color="error">
@@ -271,6 +308,13 @@ export const CategoriesWrapper: React.FC = () => {
           <AddIcon />
         </IconButton>
       </Box>
+
+      <LeaveConfirmModal
+        open={showModal}
+        pageName="カテゴリー管理"
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
 
       <Snackbar
         open={snackbar.open}
